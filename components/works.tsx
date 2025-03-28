@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 
@@ -47,30 +48,33 @@ export default function Works() {
           BUSINESSES AND CREATORS
         </motion.p>
 
-        <motion.div variants={containerVariants} className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-          <motion.div variants={itemVariants} className="p-4 border-t-2 border-black">
-            <h3 className="text-lg sm:text-xl font-bold mb-2">Happy clients</h3>
-            <p className="text-gray-700">01</p>
+        <motion.div
+          variants={containerVariants}
+          className="flex flex-col md:flex-row gap-8 my-12 border-t-2 border-black pt-8"
+        >
+          <motion.div variants={itemVariants} className="md:w-1/2">
+            <div className="overflow-hidden rounded-lg">
+              <Image
+                src="/images/lifestyle.png"
+                alt="JNCH Working"
+                width={800}
+                height={600}
+                className="w-full h-auto object-cover transition-transform duration-500 hover:scale-105"
+              />
+            </div>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="p-4 border-t-2 border-black">
-            <h3 className="text-lg sm:text-xl font-bold mb-2">Videos for Content Creators and Businesses</h3>
-            <p className="text-gray-700">02</p>
-          </motion.div>
-
-          <motion.div variants={itemVariants} className="p-4 border-t-2 border-black">
-            <h3 className="text-lg sm:text-xl font-bold mb-2">ECommerce Photography</h3>
-            <p className="text-gray-700">03</p>
-          </motion.div>
-
-          <motion.div variants={itemVariants} className="p-4 border-t-2 border-black">
-            <h3 className="text-lg sm:text-xl font-bold mb-2">Lifestyle Advertising Product Photography</h3>
-            <p className="text-gray-700">04</p>
-          </motion.div>
-
-          <motion.div variants={itemVariants} className="p-4 border-t-2 border-black">
-            <h3 className="text-lg sm:text-xl font-bold mb-2">Video and Photo Coverage for Events</h3>
-            <p className="text-gray-700">05</p>
+          <motion.div variants={itemVariants} className="md:w-1/2 flex flex-col justify-center">
+            <h3 className="text-2xl sm:text-3xl font-bold mb-4">Creative Process</h3>
+            <p className="text-base sm:text-lg mb-4">
+              At JNCH, we approach each project with passion and dedication. Our creative process involves understanding
+              your brand, identifying your target audience, and crafting visual content that resonates with your
+              message.
+            </p>
+            <p className="text-base sm:text-lg">
+              We combine technical expertise with artistic vision to deliver exceptional results that help your business
+              stand out in today's competitive market.
+            </p>
           </motion.div>
         </motion.div>
 

@@ -3,12 +3,16 @@
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, ChevronDown } from "lucide-react"
+import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [projectsOpen, setProjectsOpen] = useState(false)
   const projectsRef = useRef<HTMLDivElement>(null)
+  const pathname = usePathname()
+  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,26 +55,33 @@ export default function Navbar() {
   const scrollToSection = (sectionId: string) => {
     closeMenu()
 
-    const section = document.getElementById(sectionId)
-    if (section) {
-      // Añadir un pequeño retraso para asegurar que el menú se cierre primero
-      setTimeout(() => {
-        // Calcular la posición considerando la altura de la navbar
-        const navbarHeight = scrolled ? 60 : 80 // Altura aproximada de la navbar
-        const offsetTop = section.offsetTop - navbarHeight
+    // Si estamos en la página principal, hacemos scroll a la sección
+    if (pathname === "/") {
+      const section = document.getElementById(sectionId)
+      if (section) {
+        // Añadir un pequeño retraso para asegurar que el menú se cierre primero
+        setTimeout(() => {
+          // Calcular la posición considerando la altura de la navbar
+          const navbarHeight = scrolled ? 60 : 80 // Altura aproximada de la navbar
+          const offsetTop = section.offsetTop - navbarHeight
 
-        window.scrollTo({
-          top: offsetTop,
-          behavior: "smooth",
-        })
-      }, 100)
+          window.scrollTo({
+            top: offsetTop,
+            behavior: "smooth",
+          })
+        }, 100)
+      }
+    } else {
+      // Si no estamos en la página principal, navegamos a la página principal con un hash
+      router.push(`/#${sectionId}`)
     }
   }
 
   const projectItems = [
-    { name: "Content Creators", id: "content-creators" },
-    { name: "Ecommerce Photography", id: "ecommerce-photography" },
-    { name: "Lifestyle Photography", id: "lifestyle-photography" },
+    { name: "Content Creators", path: "/content-creators" },
+    { name: "Ecommerce Photography", path: "/ecommerce_photography" },
+    { name: "Lifestyle Photography", path: "/lifestyle_photography" },
+    { name: "Event Coverage", path: "/events" },
   ]
 
   return (
@@ -83,9 +94,9 @@ export default function Navbar() {
       }`}
     >
       <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
-        <button onClick={() => scrollToSection("hero")} className="text-white font-bold text-xl">
+        <Link href="/" className="text-white font-bold text-xl" onClick={closeMenu}>
           JNCH
-        </button>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-8 items-center">
@@ -122,13 +133,14 @@ export default function Navbar() {
                 >
                   <div className="py-2">
                     {projectItems.map((item) => (
-                      <button
+                      <Link
                         key={item.name}
-                        onClick={() => scrollToSection(item.id)}
+                        href={item.path}
                         className="block w-full text-left px-4 py-3 text-white hover:bg-gray-800 transition-colors"
+                        onClick={closeMenu}
                       >
                         {item.name}
-                      </button>
+                      </Link>
                     ))}
                   </div>
                 </motion.div>
@@ -192,13 +204,14 @@ export default function Navbar() {
                       className="pl-4 mt-2 border-l border-gray-800"
                     >
                       {projectItems.map((item) => (
-                        <button
+                        <Link
                           key={item.name}
-                          onClick={() => scrollToSection(item.id)}
+                          href={item.path}
                           className="block w-full text-left py-3 text-gray-300 hover:text-red-500 transition-colors"
+                          onClick={closeMenu}
                         >
                           {item.name}
-                        </button>
+                        </Link>
                       ))}
                     </motion.div>
                   )}

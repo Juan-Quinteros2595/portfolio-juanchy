@@ -112,3 +112,83 @@ body::-webkit-scrollbar {
   animation: blink 1s step-end infinite;
 }
 
+/* Nuevo carrusel de logos mejorado para móviles */
+.logos-container {
+  overflow: hidden;
+  padding: 20px 0;
+  background: transparent;
+  white-space: nowrap;
+  position: relative;
+  width: 100%;
+}
+
+.logos-slide {
+  display: inline-block;
+  animation: slide 40s linear infinite; /* Más lento: 40s en lugar de 25s */
+  white-space: nowrap;
+}
+
+.logo-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 30px;
+  vertical-align: middle;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Media queries para dispositivos móviles */
+@media (max-width: 768px) {
+  .logo-item {
+    padding: 0 15px;
+  }
+
+  .logos-slide {
+    animation: slide 30s linear infinite; /* Ligeramente más rápido en móviles */
+  }
+}
+
+/* Añadir snap scrolling para la página de eventos */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (min-width: 768px) {
+  .snap-start {
+    scroll-snap-align: start;
+  }
+
+  .snap-container {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100vh;
+  }
+}
+
+/* Estilos para el efecto de contorno de texto */
+.text-outline {
+  -webkit-text-stroke: 1px #c5ff00;
+  text-stroke: 1px #c5ff00;
+  color: transparent;
+}
+
+/* Ocultar barras de desplazamiento pero mantener funcionalidad */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
