@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import Image from "next/image"
+import styles from "@/styles/happy-clients.module.css"
 
 export default function HappyClients() {
   const [ref, inView] = useInView({
@@ -78,8 +79,8 @@ export default function HappyClients() {
   ]
 
   return (
-    <section className="min-h-screen flex flex-col justify-center bg-black text-white p-4 sm:p-6 py-16 sm:py-20 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-900 via-black to-black opacity-70 z-0"></div>
+    <section className={styles.section}>
+      <div className={styles.background}></div>
       <motion.div
         ref={ref}
         initial="hidden"
@@ -88,20 +89,20 @@ export default function HappyClients() {
         className="max-w-6xl mx-auto relative z-10 px-2 sm:px-0"
       >
         <motion.div variants={itemVariants} className="mb-12 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold">01</h2>
-          <h3 className="text-2xl md:text-3xl font-medium mt-2">HAPPY CLIENTS :)</h3>
+          <h2 className={styles.title}>01</h2>
+          <h3 className={styles.subtitle}>HAPPY CLIENTS :)</h3>
         </motion.div>
 
         <motion.div variants={itemVariants} className="mb-12 text-center">
-          <h4 className="text-xl md:text-2xl font-medium">Nuestros clientes hablan por sí solos.</h4>
+          <h4 className={styles.description}>Nuestros clientes hablan por sí solos.</h4>
         </motion.div>
 
         {/* Implementación alternativa del carrusel para mejor compatibilidad móvil */}
         <motion.div variants={itemVariants} className="mb-12">
-          <div className="logos-container">
-            <div className="logos-slide">
+          <div className={styles.logosContainer}>
+            <div className={styles.logosSlide}>
               {clients.map((client, index) => (
-                <div key={`logo-${index}`} className="logo-item">
+                <div key={`logo-${index}`} className={styles.logoItem}>
                   <Image
                     src={client.logo || "/placeholder.svg"}
                     alt={client.name}
@@ -113,7 +114,7 @@ export default function HappyClients() {
               ))}
               {/* Duplicar los primeros logos para crear un efecto continuo */}
               {clients.slice(0, 5).map((client, index) => (
-                <div key={`logo-dup-${index}`} className="logo-item">
+                <div key={`logo-dup-${index}`} className={styles.logoItem}>
                   <Image
                     src={client.logo || "/placeholder.svg"}
                     alt={client.name}

@@ -6,8 +6,11 @@ import Contact from "@/components/contact"
 import PortfolioNav from "@/components/portfolio-nav"
 
 export const metadata: Metadata = {
-  title: "JNCH Portfolio | The Synergy Between Creativity and Quality",
-  description: "Creative solutions for businesses and creators",
+  title: "JNCH Portfolio | Filmmaker y Fotógrafo entre Argentina y España",
+  description:
+    "Servicios de filmmaking, fotografía de productos y content creation para marcas. Especialista en fotografía lifestyle, ecommerce y cobertura de eventos en Argentina y España.",
+  keywords:
+    "filmmaker argentina, fotógrafo barcelona, content creator cannabis, fotografía productos, filmmaking eventos, fotografía ecommerce, cobertura eventos",
 }
 
 export default function Home() {

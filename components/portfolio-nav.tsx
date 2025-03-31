@@ -4,6 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import styles from "@/styles/portfolio-nav.module.css"
 
 interface PortfolioItem {
   title: string
@@ -38,42 +39,33 @@ export default function PortfolioNav() {
   ]
 
   return (
-    <section className="py-24 bg-black">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">MY PORTFOLIO</h2>
-          <div className="w-24 h-1 bg-white mx-auto"></div>
+    <section className={styles.section}>
+      <div className={styles.portfolioContainer}>
+        <div className={styles.header}>
+          <h2 className={styles.title}>MY PORTFOLIO</h2>
+          <div className={styles.divider}></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className={styles.portfolioGrid}>
           {portfolioItems.map((item, index) => (
-            <Link href={item.path} key={index} className="block relative overflow-hidden group">
+            <Link href={item.path} key={index} className={styles.portfolioItem}>
               <div
-                className="relative aspect-[3/4] w-full overflow-hidden"
+                className={styles.imageContainer}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
               >
-                <Image
-                  src={item.image || "/placeholder.svg"}
-                  alt={item.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
+                <Image src={item.image || "/placeholder.svg"} alt={item.title} fill className={styles.image} />
 
                 {/* Overlay oscuro al hacer hover */}
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-70 transition-opacity duration-300"></div>
+                <div className={styles.overlay}></div>
 
                 {/* Título con efecto de contorno */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className={styles.titleContainer}>
                   <motion.h3
                     initial={{ opacity: 0, y: 20 }}
                     animate={hoveredIndex === index ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                     transition={{ duration: 0.3 }}
-                    className="text-transparent text-2xl md:text-3xl font-bold tracking-wider"
-                    style={{
-                      WebkitTextStroke: "1px #c5ff00",
-                      textShadow: "0 0 5px rgba(197, 255, 0, 0.3)",
-                    }}
+                    className={`${styles.itemTitle} ${styles.textOutline}`}
                   >
                     {item.title}
                   </motion.h3>
@@ -83,8 +75,8 @@ export default function PortfolioNav() {
           ))}
         </div>
 
-        <div className="text-center mt-16 text-gray-500">
-          <p className="text-sm">Designed by JNCH</p>
+        <div className={styles.footer}>
+          <p className={styles.footerText}>Designed by JNCH</p>
         </div>
       </div>
     </section>

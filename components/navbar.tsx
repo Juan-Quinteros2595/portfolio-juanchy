@@ -1,10 +1,21 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, ChevronDown } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
+import styles from "@/styles/navbar.module.css"
+
+// Función para habilitar el scroll suave
+const enableSmoothScroll = () => {
+  document.documentElement.classList.add("smooth-scroll")
+  setTimeout(() => {
+    document.documentElement.classList.remove("smooth-scroll")
+  }, 1000)
+}
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -16,11 +27,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true)
-      } else {
-        setScrolled(false)
-      }
+      setScrolled(window.scrollY > 50)
     }
 
     window.addEventListener("scroll", handleScroll)
@@ -40,9 +47,14 @@ export default function Navbar() {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen)
+    // Si cerramos el menú principal, también cerramos el submenú de proyectos
+    if (!isOpen === false) {
+      setProjectsOpen(false)
+    }
   }
 
-  const toggleProjects = () => {
+  const toggleProjects = (e: React.MouseEvent) => {
+    e.stopPropagation()
     setProjectsOpen(!projectsOpen)
   }
 
@@ -51,18 +63,14 @@ export default function Navbar() {
     setProjectsOpen(false)
   }
 
-  // Función para manejar el desplazamiento suave a las secciones
   const scrollToSection = (sectionId: string) => {
     closeMenu()
 
-    // Si estamos en la página principal, hacemos scroll a la sección
     if (pathname === "/") {
       const section = document.getElementById(sectionId)
       if (section) {
-        // Añadir un pequeño retraso para asegurar que el menú se cierre primero
         setTimeout(() => {
-          // Calcular la posición considerando la altura de la navbar
-          const navbarHeight = scrolled ? 60 : 80 // Altura aproximada de la navbar
+          const navbarHeight = scrolled ? 60 : 80
           const offsetTop = section.offsetTop - navbarHeight
 
           window.scrollTo({
@@ -72,7 +80,7 @@ export default function Navbar() {
         }, 100)
       }
     } else {
-      // Si no estamos en la página principal, navegamos a la página principal con un hash
+      enableSmoothScroll()
       router.push(`/#${sectionId}`)
     }
   }
@@ -89,9 +97,7 @@ export default function Navbar() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-black bg-opacity-90 backdrop-blur-md py-2" : "bg-transparent py-3 sm:py-5"
-      }`}
+      className={`${styles.navbar} ${scrolled ? styles.scrolled : styles.transparent}`}
     >
       <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
         <Link href="/" className="text-white font-bold text-xl" onClick={closeMenu}>
@@ -100,27 +106,25 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-8 items-center">
-          <button
-            onClick={() => scrollToSection("works")}
-            className="text-white hover:text-red-500 transition-colors relative group"
-          >
-            Trabajos
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-500 transition-all duration-300 group-hover:w-full"></span>
-          </button>
+          <div className={styles.navLinkContainer}>
+            <button onClick={() => scrollToSection("works")} className={styles.navLink}>
+              Trabajos
+            </button>
+            <span className={styles.linkUnderline}></span>
+          </div>
 
           {/* Proyectos Dropdown */}
           <div ref={projectsRef} className="relative">
-            <button
-              onClick={toggleProjects}
-              className="text-white hover:text-red-500 transition-colors relative group flex items-center"
-            >
-              Proyectos
-              <ChevronDown
-                size={16}
-                className={`ml-1 transition-transform duration-300 ${projectsOpen ? "rotate-180" : ""}`}
-              />
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-500 transition-all duration-300 group-hover:w-full"></span>
-            </button>
+            <div className={styles.navLinkContainer}>
+              <button onClick={toggleProjects} className={`${styles.navLink} flex items-center`}>
+                Proyectos
+                <ChevronDown
+                  size={16}
+                  className={`ml-1 transition-transform duration-300 ${projectsOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+              <span className={styles.linkUnderline}></span>
+            </div>
 
             <AnimatePresence>
               {projectsOpen && (
@@ -129,15 +133,18 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute top-full left-0 mt-2 w-64 bg-black bg-opacity-90 backdrop-blur-md rounded-md overflow-hidden shadow-lg"
+                  className={styles.dropdownMenu}
                 >
                   <div className="py-2">
                     {projectItems.map((item) => (
                       <Link
                         key={item.name}
                         href={item.path}
-                        className="block w-full text-left px-4 py-3 text-white hover:bg-gray-800 transition-colors"
-                        onClick={closeMenu}
+                        className={styles.dropdownItem}
+                        onClick={() => {
+                          closeMenu()
+                          enableSmoothScroll()
+                        }}
                       >
                         {item.name}
                       </Link>
@@ -148,13 +155,12 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
-          <button
-            onClick={() => scrollToSection("contact")}
-            className="text-white hover:text-red-500 transition-colors relative group"
-          >
-            Contacto
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-500 transition-all duration-300 group-hover:w-full"></span>
-          </button>
+          <div className={styles.navLinkContainer}>
+            <button onClick={() => scrollToSection("contact")} className={styles.navLink}>
+              Contacto
+            </button>
+            <span className={styles.linkUnderline}></span>
+          </div>
         </div>
 
         {/* Mobile Navigation Toggle */}
@@ -167,29 +173,27 @@ export default function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden bg-black bg-opacity-95 backdrop-blur-md"
+            className="mobile-menu"
           >
-            <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-              <button
-                onClick={() => scrollToSection("works")}
-                className="text-white hover:text-red-500 transition-colors py-3 text-lg text-left"
-              >
+            <button onClick={closeMenu} className="mobile-menu-close" aria-label="Cerrar menú">
+              <X size={24} />
+            </button>
+
+            <div className="mobile-menu-content">
+              <button onClick={() => scrollToSection("works")} className="mobile-menu-link">
                 Trabajos
               </button>
 
               {/* Mobile Projects Dropdown */}
-              <div>
-                <button
-                  onClick={toggleProjects}
-                  className="text-white hover:text-red-500 transition-colors py-3 text-lg flex items-center justify-between w-full"
-                >
+              <div className="flex flex-col items-center w-full max-w-[280px]">
+                <button onClick={toggleProjects} className="mobile-menu-link flex items-center justify-center gap-2">
                   <span>Proyectos</span>
                   <ChevronDown
-                    size={16}
+                    size={20}
                     className={`transition-transform duration-300 ${projectsOpen ? "rotate-180" : ""}`}
                   />
                 </button>
@@ -201,15 +205,10 @@ export default function Navbar() {
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="pl-4 mt-2 border-l border-gray-800"
+                      className="w-full flex flex-col items-center space-y-4 mt-4"
                     >
                       {projectItems.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.path}
-                          className="block w-full text-left py-3 text-gray-300 hover:text-red-500 transition-colors"
-                          onClick={closeMenu}
-                        >
+                        <Link key={item.name} href={item.path} className="mobile-menu-link" onClick={closeMenu}>
                           {item.name}
                         </Link>
                       ))}
@@ -218,10 +217,7 @@ export default function Navbar() {
                 </AnimatePresence>
               </div>
 
-              <button
-                onClick={() => scrollToSection("contact")}
-                className="text-white hover:text-red-500 transition-colors py-3 text-lg text-left"
-              >
+              <button onClick={() => scrollToSection("contact")} className="mobile-menu-link">
                 Contacto
               </button>
             </div>

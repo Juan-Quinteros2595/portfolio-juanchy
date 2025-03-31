@@ -1,0 +1,79 @@
+.heroSection {
+  @apply min-h-screen 
+         flex 
+         flex-col 
+         justify-center 
+         items-center 
+         text-center 
+         p-4 
+         sm:p-6 
+         bg-black 
+         text-white 
+         relative 
+         overflow-hidden;
+  max-width: 100vw;
+}
+
+.heroContent {
+  @apply max-w-4xl 
+         mx-auto 
+         z-10 
+         px-4;
+}
+
+.heroTitle {
+  @apply text-4xl 
+         sm:text-5xl 
+         md:text-7xl 
+         font-bold 
+         mb-6 
+         relative;
+}
+
+.cursorBlink {
+  @apply inline-block 
+         w-1 
+         h-8 
+         sm:h-12 
+         md:h-16 
+         bg-white 
+         ml-1;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.scrollIndicator {
+  @apply absolute 
+         bottom-10 
+         left-1/2 
+         transform 
+         -translate-x-1/2 
+         cursor-pointer 
+         z-10;
+}
+
+.socialLinks {
+  @apply flex 
+         flex-col 
+         sm:flex-row 
+         justify-center 
+         sm:space-x-4 
+         space-y-2 
+         sm:space-y-0;
+}
+
+.socialLink {
+  @apply text-white 
+         hover:text-gray-300 
+         transition-colors;
+}
+

@@ -185,7 +185,7 @@ export default function ContentCreatorsPage() {
       <div className="relative h-[40vh] md:h-[50vh] overflow-hidden">
         <div className="absolute inset-0 bg-black/60 z-10"></div>
         <Image src="/images/content-creators.png" alt="Content Creators" fill className="object-cover" />
-        <div className="relative z-20 container mx-auto h-full flex flex-col justify-center px-4">
+        <div className="relative z-20 max-w-6xl mx-auto h-full flex flex-col justify-center px-4">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -206,7 +206,7 @@ export default function ContentCreatorsPage() {
       </div>
 
       {/* Content section */}
-      <div className="container mx-auto px-4 py-16">
+      <div className="max-w-6xl mx-auto px-4 py-16">
         <Tabs defaultValue="All" className="w-full">
           {/* Navegación por pestañas */}
           <div className="mb-8 overflow-x-auto pb-2">

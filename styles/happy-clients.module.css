@@ -1,0 +1,94 @@
+.section {
+  @apply min-h-screen 
+         flex 
+         flex-col 
+         justify-center 
+         bg-black 
+         text-white 
+         p-4 
+         sm:p-6 
+         py-16 
+         sm:py-20 
+         relative;
+  max-width: 100vw;
+}
+
+.background {
+  @apply absolute 
+         inset-0 
+         opacity-70 
+         z-0;
+  background: radial-gradient(ellipse at center, #1a202c, #000000, #000000);
+}
+
+.clientsContainer {
+  @apply max-w-6xl 
+         mx-auto 
+         relative 
+         z-10 
+         px-2 
+         sm:px-0;
+}
+
+.title {
+  @apply text-4xl 
+         md:text-5xl 
+         font-bold 
+         mb-4;
+}
+
+.subtitle {
+  @apply text-2xl 
+         md:text-3xl 
+         font-medium 
+         mt-2;
+}
+
+.description {
+  @apply text-xl 
+         md:text-2xl 
+         font-medium;
+}
+
+.logosContainer {
+  overflow: hidden;
+  padding: 20px 0;
+  background: transparent;
+  white-space: nowrap;
+  position: relative;
+  width: 100%;
+}
+
+.logosSlide {
+  display: inline-block;
+  animation: slide 40s linear infinite;
+  white-space: nowrap;
+}
+
+.logoItem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 30px;
+  vertical-align: middle;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@media (max-width: 768px) {
+  .logoItem {
+    padding: 0 15px;
+  }
+
+  .logosSlide {
+    animation: slide 30s linear infinite;
+  }
+}
+

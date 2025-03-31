@@ -103,38 +103,50 @@ export default function EventCoverage() {
     },
   ]
 
+  // Prevenir el zoom en dispositivos móviles
+  useEffect(() => {
+    const preventZoom = (e: TouchEvent) => {
+      if (e.touches.length > 1) {
+        e.preventDefault()
+      }
+    }
+
+    document.addEventListener("touchmove", preventZoom, { passive: false })
+
+    return () => {
+      document.removeEventListener("touchmove", preventZoom)
+    }
+  }, [])
+
   /**
    * Efecto para manejar el scroll y actualizar el evento activo
    * Calcula qué evento debe mostrarse basado en la posición de scroll
    */
   useEffect(() => {
-    if (!sectionRef.current) return
+    if (!sectionRef.current) return;
 
-    const handleScroll = () => {
-      if (!sectionRef.current) return
-
-      const sectionRect = sectionRef.current.getBoundingClientRect()
-      const sectionHeight = sectionRect.height
-      const windowHeight = window.innerHeight
-
-      // Calcular la posición relativa dentro de la sección visible
-      const scrollPosition = (windowHeight / 2 - sectionRect.top) / sectionHeight
-
-      // Calcular qué evento debe estar activo basado en la posición de scroll
-      const eventIndex = Math.min(Math.max(Math.floor(scrollPosition * events.length), 0), events.length - 1)
-
-      if (scrollPosition >= 0 && scrollPosition <= 1) {
-        setActiveEvent(eventIndex)
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute("data-index") || "0", 10);
+            setActiveEvent(index);
+          }
+        });
+      },
+      {
+        root: null, // Usa el viewport como contenedor
+        threshold: 0.3, // Reduce el umbral para detectar antes el evento
       }
-    }
+    );
 
-    window.addEventListener("scroll", handleScroll)
-    handleScroll() // Inicializar
+    const sections = sectionRef.current.querySelectorAll(".event-section");
+    sections.forEach((section) => observer.observe(section));
 
     return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [events.length])
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, [events.length]);
 
   /**
    * Abre la galería modal con las imágenes del evento seleccionado
@@ -148,31 +160,32 @@ export default function EventCoverage() {
    * Función para desplazarse a un evento específico
    */
   const scrollToEvent = (index: number) => {
-    if (sectionRef.current) {
-      const sectionTop = sectionRef.current.offsetTop
-      const sectionHeight = sectionRef.current.offsetHeight
-      const targetScroll = sectionTop + sectionHeight * ((index + 0.5) / events.length)
+    const sections = sectionRef.current?.querySelectorAll(".event-section");
+    if (sections && sections[index]) {
+      const targetSection = sections[index] as HTMLElement;
+      const offset = targetSection.offsetTop;
+
       window.scrollTo({
-        top: targetScroll,
+        top: offset,
         behavior: "smooth",
-      })
+      });
     }
-  }
+  };
 
   return (
-    <section ref={sectionRef} className="min-h-screen bg-black text-white relative overflow-hidden">
+    <section ref={sectionRef} className="min-h-screen w-full bg-black text-white relative overflow-hidden">
       {/* Fondo decorativo */}
       <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.8)_0%,rgba(0,0,0,1)_100%)] z-0"></div>
 
       {/* Navegación vertical de eventos - Solo visible en la página de eventos */}
       <div className="fixed left-0 top-1/2 transform -translate-y-1/2 z-20 hidden md:block">
-        <div className="flex flex-col items-start space-y-12 pl-8">
+        <div className="flex flex-col items-start space-y-12 pl-8 pr-4 py-8 bg-black/40 backdrop-blur-sm rounded-r-lg shadow-lg shadow-amber-900/20">
           {events.map((event, index) => (
             <button
               key={event.id}
               onClick={() => scrollToEvent(index)}
               className={`text-sm uppercase tracking-wider transition-all duration-300 ${
-                activeEvent === index ? "text-white font-bold" : "text-gray-500 hover:text-gray-300"
+                activeEvent === index ? "text-amber-400 font-bold" : "text-gray-500 hover:text-gray-300"
               }`}
             >
               {event.id}
@@ -183,19 +196,27 @@ export default function EventCoverage() {
 
       {/* Contenedor para cada evento */}
       {events.map((event, index) => (
-        <div key={event.id} className="min-h-screen flex items-center justify-center snap-start" id={event.id}>
-          <div className="container mx-auto px-4 py-24 md:py-32">
+        <div
+          key={event.id}
+          className={`min-h-screen w-full flex items-center justify-center event-section ${
+            activeEvent === index ? "z-10" : "z-0"
+          }`}
+          id={event.id}
+          data-index={index}
+        >
+          <div className="max-w-6xl mx-auto px-4 py-24 md:py-32 w-full">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
-              {/* Imagen del evento */}
-              <div className="order-2 md:order-1">
+              {/* Imagen del evento - Ahora con más margen a la izquierda en desktop */}
+              <div className="order-2 md:order-1 md:ml-16">
                 <motion.div
+                  className="relative overflow-hidden rounded-lg"
                   initial={{ opacity: 0, x: -50 }}
                   animate={{
                     opacity: activeEvent === index ? 1 : 0.3,
                     x: activeEvent === index ? 0 : -20,
                   }}
                   transition={{ duration: 0.5 }}
-                  className="relative overflow-hidden rounded-lg"
+                  style={{ pointerEvents: "auto" }} // Permitir siempre la interacción
                 >
                   <Image
                     src={event.image || "/placeholder.svg"}
@@ -218,6 +239,12 @@ export default function EventCoverage() {
                   }}
                   transition={{ duration: 0.5 }}
                   className="space-y-6"
+                  style={{
+                    pointerEvents: activeEvent === index ? "auto" : "none", // Permitir interacción solo en el evento activo
+                    opacity: activeEvent === index ? 1 : 0.3, // Asegurar opacidad explícita
+                    willChange: "opacity, transform", // Optimizar animaciones
+                    transform: "none", // Asegurar que no haya transformaciones no deseadas
+                  }}
                 >
                   <h2 className="text-4xl md:text-6xl font-bold text-amber-400">{event.title}</h2>
                   <h3 className="text-xl md:text-2xl font-light">{event.year}</h3>
@@ -247,7 +274,7 @@ export default function EventCoverage() {
 
       {/* Indicador de navegación móvil */}
       <div className="fixed bottom-8 left-0 right-0 flex justify-center md:hidden">
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 bg-black/60 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
           {events.map((_, index) => (
             <button
               key={index}

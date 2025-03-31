@@ -9,8 +9,9 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
-import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogClose, DialogTitle } from "@/components/ui/dialog"
 import { ChevronLeft, ChevronRight, X, Expand } from "lucide-react"
+import styles from "@/styles/gallery-modal.module.css"
 
 // Definición de tipos
 interface GalleryImage {
@@ -81,33 +82,35 @@ export default function GalleryModal({ images, open, onOpenChange }: GalleryModa
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] sm:max-w-[85vw] md:max-w-5xl p-0 bg-black border-gray-800 overflow-hidden">
+      <DialogContent className={styles.modalContent}>
+        {/* Título accesible para lectores de pantalla */}
+        <DialogTitle>
+          <span className="sr-only">Galería de imágenes</span>
+        </DialogTitle>
+
         <div className="relative">
           {/* Controles superiores */}
-          <div className="absolute top-4 right-4 z-30 flex space-x-2">
+          <div className={styles.controls}>
             <button
               onClick={toggleViewMode}
-              className="rounded-full bg-black/60 p-2 text-white hover:bg-black/80 transition-colors"
+              className={styles.controlButton}
               title={viewMode === "carousel" ? "Grid view" : "Carousel view"}
             >
               <Expand size={20} />
             </button>
-            <DialogClose className="rounded-full bg-black/60 p-2 text-white hover:bg-black/80 transition-colors">
+            <DialogClose className={styles.controlButton}>
               <X size={20} />
             </DialogClose>
           </div>
 
           {/* Modo carrusel */}
           {viewMode === "carousel" ? (
-            <div className="relative">
-              <div
-                className="w-full bg-black flex items-center justify-center"
-                style={{ height: `${Math.min(calculateMaxHeight(), 600)}px` }}
-              >
+            <div className={styles.carouselContainer}>
+              <div className={styles.imageContainer} style={{ height: `${Math.min(calculateMaxHeight(), 600)}px` }}>
                 {images.map((image, index) => (
                   <div
                     key={index}
-                    className={`absolute inset-0 transition-opacity duration-300 flex items-center justify-center ${
+                    className={`${styles.imageSlide} ${
                       index === currentIndex ? "opacity-100" : "opacity-0 pointer-events-none"
                     }`}
                   >
@@ -116,7 +119,7 @@ export default function GalleryModal({ images, open, onOpenChange }: GalleryModa
                       alt={image.alt}
                       width={image.width}
                       height={image.height}
-                      className="max-h-full max-w-full object-contain"
+                      className={styles.image}
                     />
                   </div>
                 ))}
@@ -125,28 +128,28 @@ export default function GalleryModal({ images, open, onOpenChange }: GalleryModa
               {/* Flechas de navegación */}
               <button
                 onClick={prevImage}
-                className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/60 p-3 text-white hover:bg-black/80 transition-colors z-20"
+                className={`${styles.navButton} ${styles.prevButton}`}
                 aria-label="Imagen anterior"
               >
                 <ChevronLeft size={24} />
               </button>
               <button
                 onClick={nextImage}
-                className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/60 p-3 text-white hover:bg-black/80 transition-colors z-20"
+                className={`${styles.navButton} ${styles.nextButton}`}
                 aria-label="Siguiente imagen"
               >
                 <ChevronRight size={24} />
               </button>
 
               {/* Miniaturas */}
-              <div className="bg-black/90 p-4">
-                <div className="flex justify-center overflow-x-auto space-x-2 pb-2 no-scrollbar">
+              <div className={styles.thumbnailsContainer}>
+                <div className={`${styles.thumbnailsScroll} no-scrollbar`}>
                   {images.map((image, index) => (
                     <button
                       key={index}
                       onClick={() => setCurrentIndex(index)}
-                      className={`flex-shrink-0 relative w-16 h-16 rounded overflow-hidden ${
-                        index === currentIndex ? "ring-2 ring-white" : "opacity-60 hover:opacity-100"
+                      className={`${styles.thumbnail} ${
+                        index === currentIndex ? styles.activeThumbnail : styles.inactiveThumbnail
                       }`}
                     >
                       <Image
@@ -158,30 +161,28 @@ export default function GalleryModal({ images, open, onOpenChange }: GalleryModa
                     </button>
                   ))}
                 </div>
-                <div className="text-white text-sm mt-2 text-center">
+                <div className={styles.counter}>
                   {currentIndex + 1} / {images.length}
                 </div>
               </div>
             </div>
           ) : (
             // Modo cuadrícula
-            <div className="bg-black p-4" style={{ height: `${Math.min(calculateMaxHeight() + 120, 720)}px` }}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 h-full overflow-y-auto no-scrollbar">
+            <div
+              className={styles.galleryContainer}
+              style={{ height: `${Math.min(calculateMaxHeight() + 120, 720)}px` }}
+            >
+              <div className={styles.galleryGridLayout}>
                 {images.map((image, index) => (
                   <div
                     key={index}
-                    className="relative aspect-square overflow-hidden rounded cursor-pointer"
+                    className={styles.gridItem}
                     onClick={() => {
                       setCurrentIndex(index)
                       setViewMode("carousel")
                     }}
                   >
-                    <Image
-                      src={image.src || "/placeholder.svg"}
-                      alt={image.alt}
-                      fill
-                      className="object-cover hover:scale-105 transition-transform duration-300"
-                    />
+                    <Image src={image.src || "/placeholder.svg"} alt={image.alt} fill className={styles.gridImage} />
                   </div>
                 ))}
               </div>

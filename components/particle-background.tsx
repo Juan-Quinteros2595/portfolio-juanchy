@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import styles from "@/styles/particle-background.module.css"
 
 interface ParticleBackgroundProps {
   inverted?: boolean
@@ -130,6 +131,6 @@ export default function ParticleBackground({ inverted = false }: ParticleBackgro
     }
   }, [isInverted])
 
-  return <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none" />
+  return <canvas ref={canvasRef} className={styles.canvas} />
 }
 

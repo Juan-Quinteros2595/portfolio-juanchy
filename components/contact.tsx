@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
+import styles from "@/styles/contact.module.css"
 
 export default function Contact() {
   const [ref, inView] = useInView({
@@ -123,80 +124,72 @@ export default function Contact() {
   }
 
   return (
-    <section className="min-h-screen flex flex-col justify-center bg-black text-white p-4 sm:p-6 py-16 sm:py-20 relative overflow-hidden">
-      <canvas ref={canvasRef} className="absolute inset-0 z-0 opacity-50" />
+    <>
+      <section className={styles.section}>
+        <canvas ref={canvasRef} className="absolute inset-0 z-0 opacity-50" />
 
-      <motion.div
-        ref={ref}
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-        variants={containerVariants}
-        className="max-w-6xl mx-auto relative z-10 flex flex-col md:flex-row md:items-center px-2 sm:px-0"
-      >
-        <div className="md:w-2/3 mb-12 md:mb-0">
-          <motion.h2
-            variants={itemVariants}
-            className="text-4xl sm:text-5xl md:text-7xl font-bold mb-8 sm:mb-12 text-red-600"
-          >
-            LET&apos;S WORK
-            <br />
-            TOGETHER!
-          </motion.h2>
+        <motion.div
+          ref={ref}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+          variants={containerVariants}
+          className={styles.contactContainer}
+        >
+          <div className="md:w-2/3 mb-12 md:mb-0">
+            <motion.h2 variants={itemVariants} className={styles.title}>
+              LET&apos;S WORK
+              <br />
+              TOGETHER!
+            </motion.h2>
 
-          <motion.div variants={containerVariants} className="space-y-4 sm:space-y-6 text-base sm:text-xl">
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row border-b border-gray-800 pb-3">
-              <span className="w-full sm:w-28 text-gray-400 mb-1 sm:mb-0">WhatsApp</span>
-              <span>+3465822698</span>
+            <motion.div variants={containerVariants} className={styles.infoContainer}>
+              <motion.div variants={itemVariants} className={styles.infoRow}>
+                <span className={styles.infoLabel}>WhatsApp</span>
+                <span itemProp="telephone">+3465822698</span>
+              </motion.div>
+
+              <motion.div variants={itemVariants} className={styles.infoRow}>
+                <span className={styles.infoLabel}>E-mail</span>
+                <span itemProp="email">juanchyfilmaker@gmail.com</span>
+              </motion.div>
+
+              <motion.div variants={itemVariants} className={styles.infoRow}>
+                <span className={styles.infoLabel}>Head Office</span>
+                <div className="flex flex-col">
+                  <span itemProp="address">Argentina, Buenos Aires</span>
+                  <span itemProp="address">Spain, Barcelona</span>
+                </div>
+              </motion.div>
+
+              <motion.div variants={itemVariants} className={styles.socialLinks}>
+                <a
+                  href="https://instagram.com/juanchy_aguilera"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialLink}
+                >
+                  @juanchy_aguilera
+                </a>
+                <a
+                  href="https://instagram.com/jnch.oficial"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialLink}
+                >
+                  @jnch.oficial
+                </a>
+              </motion.div>
             </motion.div>
+          </div>
 
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row border-b border-gray-800 pb-3">
-              <span className="w-full sm:w-28 text-gray-400 mb-1 sm:mb-0">E-mail</span>
-              <span>juanchyfilmaker@gmail.com</span>
+          <div className="md:w-1/3 flex justify-center md:justify-end">
+            <motion.div variants={itemVariants} className={`${styles.logo} ${styles.textOutline}`}>
+              JNCH
             </motion.div>
-
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row border-b border-gray-800 pb-3">
-              <span className="w-full sm:w-28 text-gray-400 mb-1 sm:mb-0">Head Office</span>
-              <div className="flex flex-col">
-                <span>Argentina, Buenos Aires</span>
-                <span>Spain, Barcelona</span>
-              </div>
-            </motion.div>
-
-            <motion.div
-              variants={itemVariants}
-              className="pt-4 sm:pt-6 flex flex-col sm:flex-row sm:space-x-6 space-y-2 sm:space-y-0"
-            >
-              <a
-                href="https://instagram.com/juanchy_aguilera"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white hover:text-red-500 transition-colors"
-              >
-                @juanchy_aguilera
-              </a>
-              <a
-                href="https://instagram.com/jnch.oficial"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white hover:text-red-500 transition-colors"
-              >
-                @jnch.oficial
-              </a>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        <div className="md:w-1/3 flex justify-center md:justify-end">
-          <motion.div
-            variants={itemVariants}
-            className="text-6xl sm:text-8xl md:text-9xl font-bold text-transparent"
-            style={{ WebkitTextStroke: "2px white" }}
-          >
-            JNCH
-          </motion.div>
-        </div>
-      </motion.div>
-    </section>
+          </div>
+        </motion.div>
+      </section>
+    </>
   )
 }
 
