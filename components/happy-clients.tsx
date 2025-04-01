@@ -97,8 +97,8 @@ export default function HappyClients() {
           <h4 className={styles.description}>Nuestros clientes hablan por sí solos.</h4>
         </motion.div>
 
-        {/* Implementación alternativa del carrusel para mejor compatibilidad móvil */}
-        <motion.div variants={itemVariants} className="mb-12">
+        {/* Improved carousel implementation for better mobile compatibility */}
+        <motion.div variants={itemVariants} className="w-full overflow-hidden">
           <div className={styles.logosContainer}>
             <div className={styles.logosSlide}>
               {clients.map((client, index) => (
@@ -108,11 +108,11 @@ export default function HappyClients() {
                     alt={client.name}
                     width={120}
                     height={60}
-                    className="object-contain"
+                    className="object-contain w-auto h-auto max-h-[60px]"
                   />
                 </div>
               ))}
-              {/* Duplicar los primeros logos para crear un efecto continuo */}
+              {/* Duplicate the first logos to create a continuous effect */}
               {clients.slice(0, 5).map((client, index) => (
                 <div key={`logo-dup-${index}`} className={styles.logoItem}>
                   <Image
@@ -120,7 +120,7 @@ export default function HappyClients() {
                     alt={client.name}
                     width={120}
                     height={60}
-                    className="object-contain"
+                    className="object-contain w-auto h-auto max-h-[60px]"
                   />
                 </div>
               ))}
@@ -128,7 +128,7 @@ export default function HappyClients() {
           </div>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="mt-8 text-center">
+        <motion.div variants={itemVariants} className="mt-8 text-center px-4 sm:px-6 md:px-8 max-w-3xl mx-auto">
           <p className="text-lg">
             Trabajamos con las mejores marcas y creadores de contenido, ayudándoles a destacar con fotografía y video de
             alta calidad.
