@@ -62,4 +62,3 @@ async function generateDiagram() {
 
 // Ejecutar la función
 generateDiagram()
-

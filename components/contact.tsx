@@ -3,9 +3,11 @@
 import { useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
+import { useLanguage } from "@/context/language-context"
 import styles from "@/styles/contact.module.css"
 
 export default function Contact() {
+  const { t } = useLanguage()
   const [ref, inView] = useInView({
     triggerOnce: false,
     threshold: 0.1,
@@ -137,27 +139,25 @@ export default function Contact() {
         >
           <div className="md:w-2/3 mb-12 md:mb-0">
             <motion.h2 variants={itemVariants} className={styles.title}>
-              LET&apos;S WORK
-              <br />
-              TOGETHER!
+              {t("contact.title")}
             </motion.h2>
 
             <motion.div variants={containerVariants} className={styles.infoContainer}>
               <motion.div variants={itemVariants} className={styles.infoRow}>
-                <span className={styles.infoLabel}>WhatsApp</span>
+                <span className={styles.infoLabel}>{t("contact.whatsapp")}</span>
                 <span itemProp="telephone">+3465822698</span>
               </motion.div>
 
               <motion.div variants={itemVariants} className={styles.infoRow}>
-                <span className={styles.infoLabel}>E-mail</span>
+                <span className={styles.infoLabel}>{t("contact.email")}</span>
                 <span itemProp="email">juanchyfilmaker@gmail.com</span>
               </motion.div>
 
               <motion.div variants={itemVariants} className={styles.infoRow}>
-                <span className={styles.infoLabel}>Head Office</span>
+                <span className={styles.infoLabel}>{t("contact.office")}</span>
                 <div className="flex flex-col">
-                  <span itemProp="address">Argentina, Buenos Aires</span>
-                  <span itemProp="address">Spain, Barcelona</span>
+                  <span itemProp="address">{t("contact.location.argentina")}</span>
+                  <span itemProp="address">{t("contact.location.spain")}</span>
                 </div>
               </motion.div>
 
@@ -192,4 +192,3 @@ export default function Contact() {
     </>
   )
 }
-

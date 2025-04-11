@@ -1,0 +1,92 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.jnchText {
+  font-size: 5rem;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  text-align: right;
+  margin-right: 2rem;
+}
+
+.scrollContainer {
+  height: 80vh; /* Aumentado para mostrar más palabras */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  width: auto;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollContainer::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.wordItem {
+  height: 200px; /* Aumentado para más espacio entre palabras */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  scroll-snap-align: center;
+  font-size: 5rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.spacer {
+  height: 40vh; /* Espaciador para permitir que la primera y última palabra se centren */
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .jnchText {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    margin-right: 0;
+    text-align: center;
+  }
+
+  .scrollContainer {
+    height: 60vh;
+  }
+
+  .wordItem {
+    font-size: 3.5rem;
+    height: 120px;
+    justify-content: center;
+  }
+
+  .spacer {
+    height: 30vh;
+  }
+}

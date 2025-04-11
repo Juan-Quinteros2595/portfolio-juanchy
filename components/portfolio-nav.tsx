@@ -4,37 +4,44 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { useLanguage } from "@/context/language-context"
 import styles from "@/styles/portfolio-nav.module.css"
 
 interface PortfolioItem {
   title: string
   path: string
   image: string
+  translationKey: string
 }
 
 export default function PortfolioNav() {
+  const { t } = useLanguage()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   const portfolioItems: PortfolioItem[] = [
     {
-      title: "CONTENT CREATORS",
+      title: t("projects.content"),
       path: "/content-creators",
       image: "/images/content-creators.png",
+      translationKey: "projects.content",
     },
     {
-      title: "ECOMMERCE",
+      title: t("projects.ecommerce"),
       path: "/ecommerce_photography",
       image: "/images/ecommerce.png",
+      translationKey: "projects.ecommerce",
     },
     {
-      title: "LIFESTYLE",
+      title: t("projects.lifestyle"),
       path: "/lifestyle_photography",
       image: "/images/lifestyle.png",
+      translationKey: "projects.lifestyle",
     },
     {
-      title: "EVENTS",
+      title: t("projects.events"),
       path: "/events",
       image: "/images/events.png",
+      translationKey: "projects.events",
     },
   ]
 
@@ -42,7 +49,7 @@ export default function PortfolioNav() {
     <section className={styles.section}>
       <div className={styles.portfolioContainer}>
         <div className={styles.header}>
-          <h2 className={styles.title}>MY PORTFOLIO</h2>
+          <h2 className={styles.title}>{t("portfolio.title")}</h2>
           <div className={styles.divider}></div>
         </div>
 
@@ -76,10 +83,9 @@ export default function PortfolioNav() {
         </div>
 
         <div className={styles.footer}>
-          <p className={styles.footerText}>Designed by JNCH</p>
+          <p className={styles.footerText}>{t("portfolio.footer")}</p>
         </div>
       </div>
     </section>
   )
 }
-

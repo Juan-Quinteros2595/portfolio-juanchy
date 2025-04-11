@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Hero from "@/components/hero"
 import Works from "@/components/works"
-import HappyClients from "@/components/happy-clients"
+import HappyClientsSlider from "@/components/happy-clients-slider"
 import Contact from "@/components/contact"
 import PortfolioNav from "@/components/portfolio-nav"
 
@@ -24,7 +24,7 @@ export default function Home() {
       </section>
       <PortfolioNav />
       <section>
-        <HappyClients />
+        <HappyClientsSlider />
       </section>
       <section id="contact">
         <Contact />
@@ -32,4 +32,3 @@ export default function Home() {
     </main>
   )
 }
-

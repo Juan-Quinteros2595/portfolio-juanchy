@@ -133,4 +133,3 @@ export default function ParticleBackground({ inverted = false }: ParticleBackgro
 
   return <canvas ref={canvasRef} className={styles.canvas} />
 }
-

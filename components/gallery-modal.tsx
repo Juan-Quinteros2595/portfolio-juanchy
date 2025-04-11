@@ -193,4 +193,3 @@ export default function GalleryModal({ images, open, onOpenChange }: GalleryModa
     </Dialog>
   )
 }
-

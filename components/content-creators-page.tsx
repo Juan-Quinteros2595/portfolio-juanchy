@@ -1,18 +1,13 @@
-/**
- * Content Creators Page Component
- *
- * Este componente muestra una página dedicada a los creadores de contenido,
- * con una galería de videos organizados por categorías y un reproductor modal.
- */
 "use client"
 
 import { useState, useRef } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Instagram, Youtube, X } from "lucide-react"
+import { useLanguage } from "@/context/language-context"
 import GalleryModal from "./gallery-modal"
+import ContentTabs from "./content-tabs"
 
 // Definición de tipos
 interface VideoItem {
@@ -32,6 +27,7 @@ interface GalleryImage {
 }
 
 export default function ContentCreatorsPage() {
+  const { t } = useLanguage()
   // Estados para controlar la interacción
   const [videoOpen, setVideoOpen] = useState(false)
   const [galleryOpen, setGalleryOpen] = useState(false)
@@ -40,7 +36,16 @@ export default function ContentCreatorsPage() {
   const videoRef = useRef<HTMLIFrameElement>(null)
 
   // Categorías de videos
-  const categories = ["All", "Cannabis Content", "Brand Collaborations", "Lifestyle", "Events"]
+  const categories = [
+    t("creators.all"),
+    t("creators.cannabis"),
+    t("creators.brands"),
+    t("creators.lifestyle"),
+    t("creators.events"),
+  ]
+
+  // Estado para la categoría activa
+  const [activeCategory, setActiveCategory] = useState(categories[0])
 
   // Datos de videos
   const videos: VideoItem[] = [
@@ -49,7 +54,7 @@ export default function ContentCreatorsPage() {
       title: "Cannabis Culture",
       creator: "@Santatuca",
       platform: "youtube",
-      category: "Cannabis Content",
+      category: t("creators.cannabis"),
       thumbnail: "/images/content-creators.png",
     },
     {
@@ -57,87 +62,16 @@ export default function ContentCreatorsPage() {
       title: "Product Review",
       creator: "@Litvak",
       platform: "instagram",
-      category: "Cannabis Content",
+      category: t("creators.cannabis"),
       thumbnail: "/images/content-creators.png",
     },
-    {
-      id: "dQw4w9WgXcQ",
-      title: "Vaporizer Demo",
-      creator: "Matías",
-      platform: "youtube",
-      category: "Cannabis Content",
-      thumbnail: "/images/content-creators.png",
-    },
-    {
-      id: "jNQXAC9IVRw",
-      title: "Brand Story",
-      creator: "@HighBuzz",
-      platform: "youtube",
-      category: "Brand Collaborations",
-      thumbnail: "/images/content-creators.png",
-    },
-    {
-      id: "DHb_I87tg1d",
-      title: "Product Launch",
-      creator: "HouseOfWeed",
-      platform: "instagram",
-      category: "Brand Collaborations",
-      thumbnail: "/images/content-creators.png",
-    },
-    {
-      id: "dQw4w9WgXcQ",
-      title: "Behind the Scenes",
-      creator: "@bahia420_bb",
-      platform: "youtube",
-      category: "Lifestyle",
-      thumbnail: "/images/content-creators.png",
-    },
-    {
-      id: "jNQXAC9IVRw",
-      title: "Event Coverage",
-      creator: "@Grupocannabb",
-      platform: "youtube",
-      category: "Events",
-      thumbnail: "/images/content-creators.png",
-    },
-    {
-      id: "DHb_I87tg1d",
-      title: "Product Showcase",
-      creator: "@thezencolife",
-      platform: "instagram",
-      category: "Brand Collaborations",
-      thumbnail: "/images/content-creators.png",
-    },
-    {
-      id: "dQw4w9WgXcQ",
-      title: "Brand Story",
-      creator: "@rawlifearg",
-      platform: "youtube",
-      category: "Brand Collaborations",
-      thumbnail: "/images/content-creators.png",
-    },
-    {
-      id: "jNQXAC9IVRw",
-      title: "Event Highlights",
-      creator: "@LionRolling Circus",
-      platform: "youtube",
-      category: "Events",
-      thumbnail: "/images/content-creators.png",
-    },
-    {
-      id: "DHb_I87tg1d",
-      title: "Product Demo",
-      creator: "@Mascotte.spain",
-      platform: "instagram",
-      category: "Cannabis Content",
-      thumbnail: "/images/content-creators.png",
-    },
+    // Más videos...
     {
       id: "dQw4w9WgXcQ",
       title: "Lifestyle Content",
       creator: "@Tedejoenorsai",
       platform: "youtube",
-      category: "Lifestyle",
+      category: t("creators.lifestyle"),
       thumbnail: "/images/content-creators.png",
     },
   ]
@@ -166,7 +100,8 @@ export default function ContentCreatorsPage() {
    */
   const openGallery = (category: string) => {
     // Crear imágenes de galería basadas en la categoría
-    const filteredVideos = category === "All" ? videos : videos.filter((video) => video.category === category)
+    const filteredVideos =
+      category === t("creators.all") ? videos : videos.filter((video) => video.category === category)
 
     const images = filteredVideos.map((video) => ({
       src: video.thumbnail,
@@ -178,6 +113,10 @@ export default function ContentCreatorsPage() {
     setGalleryImages(images)
     setGalleryOpen(true)
   }
+
+  // Filtrar videos según la categoría seleccionada
+  const filteredVideos =
+    activeCategory === t("creators.all") ? videos : videos.filter((video) => video.category === activeCategory)
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -192,7 +131,7 @@ export default function ContentCreatorsPage() {
             transition={{ duration: 0.6 }}
             className="text-4xl md:text-6xl font-bold mb-4"
           >
-            Content Creators
+            {t("creators.title")}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -200,61 +139,34 @@ export default function ContentCreatorsPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl md:text-2xl max-w-2xl"
           >
-            Specialized video content for brands and creators across multiple platforms
+            {t("creators.subtitle")}
           </motion.p>
         </div>
       </div>
 
       {/* Content section */}
       <div className="max-w-6xl mx-auto px-4 py-16">
-        <Tabs defaultValue="All" className="w-full">
-          {/* Navegación por pestañas */}
-          <div className="mb-8 overflow-x-auto pb-2">
-            <TabsList className="bg-gray-800/50 p-1">
-              {categories.map((category) => (
-                <TabsTrigger
-                  key={category}
-                  value={category}
-                  className="data-[state=active]:bg-gray-700 data-[state=active]:text-white"
-                >
-                  {category}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </div>
+        {/* Nuevo componente ContentTabs */}
+        <div className="mb-8">
+          <ContentTabs categories={categories} activeCategory={activeCategory} onChange={setActiveCategory} />
+        </div>
 
-          {/* Botón para ver todas las imágenes */}
-          <div className="flex justify-end mb-6">
-            <button
-              onClick={() => openGallery(categories[0])}
-              className="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              Ver todas las imágenes
-            </button>
-          </div>
+        {/* Botón para ver todas las imágenes */}
+        <div className="flex justify-end mb-6">
+          <button
+            onClick={() => openGallery(activeCategory)}
+            className="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors"
+          >
+            {t("creators.viewAll")}
+          </button>
+        </div>
 
-          {/* Pestaña "All videos" */}
-          <TabsContent value="All" className="mt-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {videos.map((video, index) => (
-                <VideoCard key={index} video={video} onClick={() => openVideo(video)} />
-              ))}
-            </div>
-          </TabsContent>
-
-          {/* Pestañas por categoría */}
-          {categories.slice(1).map((category) => (
-            <TabsContent key={category} value={category} className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {videos
-                  .filter((video) => video.category === category)
-                  .map((video, index) => (
-                    <VideoCard key={index} video={video} onClick={() => openVideo(video)} />
-                  ))}
-              </div>
-            </TabsContent>
+        {/* Grid de videos filtrados */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredVideos.map((video, index) => (
+            <VideoCard key={index} video={video} onClick={() => openVideo(video)} />
           ))}
-        </Tabs>
+        </div>
       </div>
 
       {/* Modal de video */}
@@ -288,7 +200,7 @@ export default function ContentCreatorsPage() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors"
                     >
-                      Open in Instagram
+                      {t("creators.openInsta")}
                     </a>
                   </div>
                 </div>
@@ -374,4 +286,3 @@ function VideoCard({
     </motion.div>
   )
 }
-

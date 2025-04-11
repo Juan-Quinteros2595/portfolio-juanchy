@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import Image from "next/image"
-import styles from "@/styles/happy-clients.module.css"
+import styles from "./happy-clients.module.css"
 
 export default function HappyClients() {
   const [ref, inView] = useInView({
@@ -79,7 +79,7 @@ export default function HappyClients() {
   ]
 
   return (
-    <section className={styles.section}>
+    <section className={`${styles.section} overflow-hidden`}>
       <div className={styles.background}></div>
       <motion.div
         ref={ref}
@@ -97,8 +97,8 @@ export default function HappyClients() {
           <h4 className={styles.description}>Nuestros clientes hablan por sí solos.</h4>
         </motion.div>
 
-        {/* Improved carousel implementation for better mobile compatibility */}
-        <motion.div variants={itemVariants} className="w-full overflow-hidden">
+        {/* Carrusel de logos */}
+        <motion.div variants={itemVariants} className="mb-12 overflow-hidden">
           <div className={styles.logosContainer}>
             <div className={styles.logosSlide}>
               {clients.map((client, index) => (
@@ -108,11 +108,12 @@ export default function HappyClients() {
                     alt={client.name}
                     width={120}
                     height={60}
-                    className="object-contain w-auto h-auto max-h-[60px]"
+                    loading="lazy"
+                    className="object-contain max-w-full h-auto"
                   />
                 </div>
               ))}
-              {/* Duplicate the first logos to create a continuous effect */}
+              {/* Duplicar los primeros logos para crear un efecto continuo */}
               {clients.slice(0, 5).map((client, index) => (
                 <div key={`logo-dup-${index}`} className={styles.logoItem}>
                   <Image
@@ -120,7 +121,8 @@ export default function HappyClients() {
                     alt={client.name}
                     width={120}
                     height={60}
-                    className="object-contain w-auto h-auto max-h-[60px]"
+                    loading="lazy"
+                    className="object-contain max-w-full h-auto"
                   />
                 </div>
               ))}
@@ -128,7 +130,7 @@ export default function HappyClients() {
           </div>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="mt-8 text-center px-4 sm:px-6 md:px-8 max-w-3xl mx-auto">
+        <motion.div variants={itemVariants} className="mt-8 text-center px-4">
           <p className="text-lg">
             Trabajamos con las mejores marcas y creadores de contenido, ayudándoles a destacar con fotografía y video de
             alta calidad.
@@ -138,4 +140,3 @@ export default function HappyClients() {
     </section>
   )
 }
-

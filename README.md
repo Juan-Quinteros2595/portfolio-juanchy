@@ -87,7 +87,94 @@ El sitio web está construido con Next.js y utiliza React para crear una experie
 - **Tailwind CSS**: Para estilos y diseño responsive
 - **Lucide React**: Para iconos vectoriales
 - **Shadcn/UI**: Componentes de UI reutilizables y accesibles
+
+## Características Destacadas
+
+1. **Experiencia de Desplazamiento Interactiva**
+   - Las páginas de proyectos utilizan efectos de scroll para mostrar diferentes proyectos
+   - Navegación lateral que indica la posición actual
+
+2. **Galería Modal Avanzada**
+   - Visualización de imágenes en modo carrusel o cuadrícula
+   - Miniaturas para navegación rápida
+   - Controles intuitivos
+
+3. **Diseño Responsive**
+   - Adaptación completa a dispositivos móviles, tablets y escritorio
+   - Menús y navegación optimizados para cada tamaño de pantalla
+
+4. **Efectos Visuales**
+   - Partículas interactivas en la sección Hero
+   - Animaciones de ondas en la sección Contact
+   - Efectos de hover en elementos interactivos
+
+5. **Organización por Categorías**
+   - Contenido organizado por tipos de proyectos
+   - Navegación intuitiva entre diferentes secciones
+
+## Cómo Continuar con el Desarrollo
+
+### Mejoras Técnicas
+
+1. **Optimización de Imágenes**
+   - Implementar carga progresiva de imágenes
+   - Utilizar formatos modernos como WebP
+   - Configurar tamaños responsivos para diferentes dispositivos
+
+2. **Rendimiento**
+   - Implementar lazy loading para componentes
+   - Optimizar las animaciones para dispositivos de gama baja
+   - Mejorar el Server-Side Rendering (SSR) para SEO
+
+3. **Funcionalidades Adicionales**
+   - Formulario de contacto funcional con validación
+   - Filtrado avanzado de proyectos por categoría, año o cliente
+   - Sistema de comentarios o testimonios
+
+### Consejos de Branding
+
+1. **Consistencia Visual**
+   - Mantener la paleta de colores (negro, blanco, rojo, azul, ámbar) en todos los materiales
+   - Usar siempre la misma tipografía (Montserrat)
+   - Mantener el estilo minimalista y elegante
+
+2. **Contenido**
+   - Actualizar regularmente con nuevos proyectos
+   - Incluir testimonios de clientes
+   - Añadir casos de estudio detallados
+
+3. **Presencia en Redes Sociales**
+   - Vincular todas las redes sociales
+   - Mantener coherencia entre el sitio web y las redes
+   - Compartir el mismo tipo de contenido visual
+
+4. **Expansión de Marca**
+   - Considerar crear un blog con consejos de fotografía y video
+   - Desarrollar un kit de prensa descargable
+   - Crear plantillas de presentación para propuestas a clientes
+
+## Mantenimiento
+
+Para mantener el sitio actualizado:
+
+1. Actualizar regularmente las imágenes y videos de muestra
+2. Revisar y actualizar la lista de clientes
+3. Mantener las dependencias de Next.js y otras bibliotecas actualizadas
+4. Realizar pruebas periódicas en diferentes dispositivos y navegadores
+
+## Despliegue
+
+El sitio está optimizado para ser desplegado en Vercel, que ofrece:
+- Despliegue automático desde GitHub
+- Previews de cada commit
+- Análisis de rendimiento
+- Certificados SSL automáticos
+
+Para desplegar en Vercel:
+1. Conectar el repositorio de GitHub
+2. Configurar variables de entorno si es necesario
+3. Seleccionar la rama principal para producción
+
 ---
 
-Este README proporciona una visión general del proyecto y sirve como guía para futuros desarrolladores que trabajen en el sitio.
-
+Este README proporciona una visión general del proyecto y sirve como guía para futuros desarrolladores que trabajen en el sitio. Para cualquier pregunta adicional, contactar a través de los canales proporcionados en la sección de contacto del sitio.

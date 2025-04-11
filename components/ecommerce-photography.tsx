@@ -3,8 +3,10 @@
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
+import { useLanguage } from "@/context/language-context"
 
 export default function EcommercePhotography() {
+  const { t } = useLanguage()
   const [ref, inView] = useInView({
     triggerOnce: false,
     threshold: 0.1,
@@ -41,9 +43,9 @@ export default function EcommercePhotography() {
         className="max-w-4xl mx-auto relative z-10"
       >
         <motion.div variants={itemVariants} className="mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold">03</h2>
-          <h3 className="text-2xl md:text-3xl font-medium mt-2">ECOMMERCE PHOTOGRAPHY</h3>
-          <p className="text-xl mt-4">FOCUS ON QUALITY AND TRUE PRODUCT REPRESENTATION</p>
+          <h2 className="text-4xl md:text-5xl font-bold">{t("ecommerce.number")}</h2>
+          <h3 className="text-2xl md:text-3xl font-medium mt-2">{t("ecommerce.title")}</h3>
+          <p className="text-xl mt-4">{t("ecommerce.subtitle")}</p>
         </motion.div>
 
         <motion.div variants={containerVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -80,17 +82,16 @@ export default function EcommercePhotography() {
 
         <motion.div variants={itemVariants} className="mt-8">
           <p className="text-lg">
-            <span className="font-bold">Year:</span> 2024
+            <span className="font-bold">{t("ecommerce.year")}</span> 2024
           </p>
           <p className="text-lg">
-            <span className="font-bold">Client Information:</span> MAGIC VAPORIZERS
+            <span className="font-bold">{t("ecommerce.client")}</span> MAGIC VAPORIZERS
           </p>
           <p className="text-lg">
-            <span className="font-bold">Instagram:</span> @juanchy_aguilera | @MagicVaporizers
+            <span className="font-bold">{t("ecommerce.instagram")}</span> @juanchy_aguilera | @MagicVaporizers
           </p>
         </motion.div>
       </motion.div>
     </section>
   )
 }
-

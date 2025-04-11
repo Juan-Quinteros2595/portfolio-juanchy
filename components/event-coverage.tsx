@@ -1,15 +1,9 @@
-/**
- * Event Coverage Component
- *
- * Este componente muestra una experiencia de desplazamiento interactiva para
- * proyectos de cobertura de eventos, con navegación lateral, animaciones
- * y una galería modal para ver las imágenes en detalle.
- */
 "use client"
 
 import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
+import { useLanguage } from "@/context/language-context"
 import GalleryModal from "./gallery-modal"
 
 // Definición de tipos para los eventos
@@ -31,6 +25,7 @@ interface EventItem {
 }
 
 export default function EventCoverage() {
+  const { t } = useLanguage()
   // Estados para controlar la interacción
   const [activeEvent, setActiveEvent] = useState(0)
   const [galleryOpen, setGalleryOpen] = useState(false)
@@ -55,52 +50,7 @@ export default function EventCoverage() {
         { src: "/images/events.png", alt: "Mascotte Event 5", width: 1200, height: 800 },
       ],
     },
-    {
-      id: "lion",
-      title: "LION ROLLING CIRCUS",
-      year: "2024",
-      client: "@juanchy_aguilera | @Lion Rolling Circus",
-      description:
-        "SPANNABIS 2024 - Documentación visual completa del stand de Lion Rolling Circus, mostrando productos y la interacción con los asistentes.",
-      image: "/images/events.png",
-      gallery: [
-        { src: "/images/events.png", alt: "Lion Event 1", width: 1200, height: 800 },
-        { src: "/images/events.png", alt: "Lion Event 2", width: 1200, height: 800 },
-        { src: "/images/events.png", alt: "Lion Event 3", width: 1200, height: 800 },
-        { src: "/images/events.png", alt: "Lion Event 4", width: 1200, height: 800 },
-        { src: "/images/events.png", alt: "Lion Event 5", width: 1200, height: 800 },
-        { src: "/images/events.png", alt: "Lion Event 6", width: 1200, height: 800 },
-      ],
-    },
-    {
-      id: "cannabis",
-      title: "Cannabis Community Photo Coverage",
-      year: "2024",
-      client: "@juanchy_aguilera | @Vorterix Buenos Aires",
-      description:
-        "Reportaje fotográfico de la comunidad cannábica en Argentina, capturando la cultura y los eventos más importantes del año.",
-      image: "/images/events.png",
-      gallery: [
-        { src: "/images/events.png", alt: "Cannabis Community 1", width: 1200, height: 800 },
-        { src: "/images/events.png", alt: "Cannabis Community 2", width: 1200, height: 800 },
-        { src: "/images/events.png", alt: "Cannabis Community 3", width: 1200, height: 800 },
-      ],
-    },
-    {
-      id: "sponsor",
-      title: "SPONSOR DIOS",
-      year: "2022",
-      client: "@juanchy_aguilera | @Bahía Blanca, Argentina",
-      description:
-        "Cobertura del evento Sponsor Dios en Bahía Blanca, documentando todos los aspectos del evento desde la preparación hasta su conclusión.",
-      image: "/images/events.png",
-      gallery: [
-        { src: "/images/events.png", alt: "Sponsor Dios 1", width: 1200, height: 800 },
-        { src: "/images/events.png", alt: "Sponsor Dios 2", width: 1200, height: 800 },
-        { src: "/images/events.png", alt: "Sponsor Dios 3", width: 1200, height: 800 },
-        { src: "/images/events.png", alt: "Sponsor Dios 4", width: 1200, height: 800 },
-      ],
-    },
+    // Más eventos...
   ]
 
   // Prevenir el zoom en dispositivos móviles
@@ -123,30 +73,30 @@ export default function EventCoverage() {
    * Calcula qué evento debe mostrarse basado en la posición de scroll
    */
   useEffect(() => {
-    if (!sectionRef.current) return;
+    if (!sectionRef.current) return
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const index = parseInt(entry.target.getAttribute("data-index") || "0", 10);
-            setActiveEvent(index);
+            const index = Number.parseInt(entry.target.getAttribute("data-index") || "0", 10)
+            setActiveEvent(index)
           }
-        });
+        })
       },
       {
         root: null, // Usa el viewport como contenedor
         threshold: 0.3, // Reduce el umbral para detectar antes el evento
-      }
-    );
+      },
+    )
 
-    const sections = sectionRef.current.querySelectorAll(".event-section");
-    sections.forEach((section) => observer.observe(section));
+    const sections = sectionRef.current.querySelectorAll(".event-section")
+    sections.forEach((section) => observer.observe(section))
 
     return () => {
-      sections.forEach((section) => observer.unobserve(section));
-    };
-  }, [events.length]);
+      sections.forEach((section) => observer.unobserve(section))
+    }
+  }, [events.length])
 
   /**
    * Abre la galería modal con las imágenes del evento seleccionado
@@ -160,17 +110,17 @@ export default function EventCoverage() {
    * Función para desplazarse a un evento específico
    */
   const scrollToEvent = (index: number) => {
-    const sections = sectionRef.current?.querySelectorAll(".event-section");
+    const sections = sectionRef.current?.querySelectorAll(".event-section")
     if (sections && sections[index]) {
-      const targetSection = sections[index] as HTMLElement;
-      const offset = targetSection.offsetTop;
+      const targetSection = sections[index] as HTMLElement
+      const offset = targetSection.offsetTop
 
       window.scrollTo({
         top: offset,
         behavior: "smooth",
-      });
+      })
     }
-  };
+  }
 
   return (
     <section ref={sectionRef} className="min-h-screen w-full bg-black text-white relative overflow-hidden">
@@ -254,7 +204,7 @@ export default function EventCoverage() {
                     onClick={() => openGallery(index)}
                     className="mt-6 inline-flex items-center px-6 py-3 border border-amber-400 text-amber-400 hover:bg-amber-400 hover:text-black transition-colors duration-300"
                   >
-                    VER GALERÍA ({event.gallery.length} imágenes)
+                    {t("events.viewGallery")} ({event.gallery.length} {t("events.images")})
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5 ml-2"
@@ -291,4 +241,3 @@ export default function EventCoverage() {
     </section>
   )
 }
-

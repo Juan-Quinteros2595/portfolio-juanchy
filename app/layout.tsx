@@ -1,27 +1,28 @@
 import type React from "react"
 import "@/app/globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { LanguageProvider } from "@/context/language-context"
 import Navbar from "@/components/navbar"
 import Script from "next/script"
 
 export const metadata = {
-  title: "Juanchy Creativity | Filmmaker & Fotógrafo Comercial | Argentina-España",
+  title: "Juanchy Creativity | Filmmaker & Photographer | Argentina-Spain",
   description:
-    "Servicios profesionales de filmmaking, fotografía de productos y content creation para marcas de cannabis y lifestyle entre Argentina y Barcelona.",
+    "Professional filmmaking, product photography and content creation services for cannabis and lifestyle brands between Argentina and Barcelona.",
   keywords:
-    "filmmaker argentina, fotógrafo barcelona, content creator cannabis, fotografía productos, filmmaking eventos, fotografía ecommerce, cobertura eventos",
+    "filmmaker argentina, photographer barcelona, content creator cannabis, product photography, event filmmaking, ecommerce photography, event coverage",
   openGraph: {
-    title: "Juanchy Creativity | Filmmaker & Fotógrafo Comercial",
-    description: "Servicios de filmmaking y fotografía comercial entre Argentina y España",
+    title: "Juanchy Creativity | Filmmaker & Photographer",
+    description: "Filmmaking and commercial photography services between Argentina and Spain",
     url: "https://portfolio-juanchy.vercel.app",
     siteName: "Juanchy Creativity",
-    locale: "es_ES",
+    locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary",
-    title: "Juanchy Creativity | Filmmaker & Fotógrafo Comercial",
-    description: "Servicios de filmmaking y fotografía comercial entre Argentina y España",
+    title: "Juanchy Creativity | Filmmaker & Photographer",
+    description: "Filmmaking and commercial photography services between Argentina and Spain",
   },
   alternates: {
     canonical: "https://portfolio-juanchy.vercel.app",
@@ -46,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -59,8 +60,11 @@ export default function RootLayout({
       </head>
       <body className="font-montserrat">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <Navbar/>
-          {children}
+          {/* Envolvemos la aplicación con el LanguageProvider */}
+          <LanguageProvider>
+            <Navbar />
+            {children}
+          </LanguageProvider>
         </ThemeProvider>
 
         {/* Schema.org markup para SEO */}
@@ -69,9 +73,9 @@ export default function RootLayout({
             {
               "@context": "https://schema.org",
               "@type": "ProfessionalService",
-              "name": "Juanchy Creativity - Filmmaker & Fotógrafo",
+              "name": "Juanchy Creativity - Filmmaker & Photographer",
               "image": "https://portfolio-juanchy.vercel.app/images/logo.jpg",
-              "description": "Servicios profesionales de filmmaking y fotografía comercial especializada en cannabis, lifestyle y eventos",
+              "description": "Professional filmmaking and commercial photography services specialized in cannabis, lifestyle and events",
               "address": [
                 {
                   "@type": "PostalAddress",
@@ -106,38 +110,38 @@ export default function RootLayout({
               ],
               "hasOfferCatalog": {
                 "@type": "OfferCatalog",
-                "name": "Servicios de Fotografía y Video",
+                "name": "Photography and Video Services",
                 "itemListElement": [
                   {
                     "@type": "Offer",
                     "itemOffered": {
                       "@type": "Service",
-                      "name": "Fotografía de Productos para Ecommerce",
-                      "description": "Fotografía profesional de productos para tiendas online y catálogos"
+                      "name": "Product Photography for Ecommerce",
+                      "description": "Professional product photography for online stores and catalogs"
                     }
                   },
                   {
                     "@type": "Offer",
                     "itemOffered": {
                       "@type": "Service",
-                      "name": "Filmmaking para Eventos",
-                      "description": "Cobertura audiovisual completa de eventos corporativos y culturales"
+                      "name": "Event Filmmaking",
+                      "description": "Complete audiovisual coverage of corporate and cultural events"
                     }
                   },
                   {
                     "@type": "Offer",
                     "itemOffered": {
                       "@type": "Service",
-                      "name": "Content Creation para Marcas",
-                      "description": "Creación de contenido visual para redes sociales y marketing digital"
+                      "name": "Content Creation for Brands",
+                      "description": "Visual content creation for social media and digital marketing"
                     }
                   },
                   {
                     "@type": "Offer",
                     "itemOffered": {
                       "@type": "Service",
-                      "name": "Fotografía Lifestyle",
-                      "description": "Fotografía de estilo de vida para marcas y productos en contextos naturales"
+                      "name": "Lifestyle Photography",
+                      "description": "Lifestyle photography for brands and products in natural contexts"
                     }
                   }
                 ]
@@ -153,19 +157,19 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Person",
               "name": "Juanchy Aguilera",
-              "jobTitle": "Filmmaker y Fotógrafo Comercial",
+              "jobTitle": "Filmmaker and Commercial Photographer",
               "worksFor": {
                 "@type": "Organization",
                 "name": "Juanchy Creativity"
               },
-              "knowsAbout": ["Fotografía de Productos", "Filmmaking", "Content Creation", "Fotografía Lifestyle", "Cobertura de Eventos"],
+              "knowsAbout": ["Product Photography", "Filmmaking", "Content Creation", "Lifestyle Photography", "Event Coverage"],
               "workLocation": [
                 {
                   "@type": "Place",
                   "address": {
                     "@type": "PostalAddress",
                     "addressLocality": "Barcelona",
-                    "addressCountry": "España"
+                    "addressCountry": "Spain"
                   }
                 },
                 {
@@ -188,7 +192,6 @@ export default function RootLayout({
     </html>
   )
 }
-
 
 
 import './globals.css'

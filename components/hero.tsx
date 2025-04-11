@@ -5,23 +5,21 @@ import { motion } from "framer-motion"
 import { ChevronDown } from "lucide-react"
 import styles from "@/styles/hero.module.css"
 import ParticleBackground from "./particle-background"
+import WordScroller from "./word-scroller"
 
 export default function Hero() {
-  const [typedText, setTypedText] = useState("")
-  const fullText = "Juanchy Creativity"
+  const [showContent, setShowContent] = useState(false)
+
+  // Lista de palabras para el scroller
+  const words = ["Design", "Animate", "Imagine", "Illustrate", "Refine", "Collaborate", "Innovate"]
 
   useEffect(() => {
-    let currentIndex = 0
-    const typingInterval = setInterval(() => {
-      if (currentIndex <= fullText.length) {
-        setTypedText(fullText.substring(0, currentIndex))
-        currentIndex++
-      } else {
-        clearInterval(typingInterval)
-      }
-    }, 150) // Ajusta la velocidad de tipado aquí
+    // Mostrar el contenido después de un breve retraso
+    const timer = setTimeout(() => {
+      setShowContent(true)
+    }, 500)
 
-    return () => clearInterval(typingInterval)
+    return () => clearTimeout(timer)
   }, [])
 
   const scrollToContent = () => {
@@ -32,68 +30,33 @@ export default function Hero() {
   }
 
   return (
-    <>
-      <section className={styles.heroSection}>
-        <ParticleBackground />
+    <section className={styles.heroSection}>
+      <ParticleBackground />
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className={styles.heroContent}
-        >
-          <h1 className={styles.heroTitle}>
-            <span className="inline-block">{typedText}</span>
-            <span className={styles.cursorBlink}></span>
-          </h1>
-          <motion.p
-            className="text-lg sm:text-xl md:text-2xl mb-12"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-          >
-            THE SYNERGY BETWEEN CREATIVITY AND QUALITY
-          </motion.p>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9, duration: 0.8 }}>
-            <div className={styles.socialLinks}>
-              <a
-                href="https://instagram.com/juanchy_aguilera"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.socialLink}
-              >
-                @juanchy_aguilera
-              </a>
-              <a
-                href="https://instagram.com/jnch.oficial"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.socialLink}
-              >
-                @jnch.oficial
-              </a>
-            </div>
-          </motion.div>
-        </motion.div>
+      {showContent ? (
+        <WordScroller words={words} />
+      ) : (
+        <div className="flex items-center justify-center h-full w-full">
+          <div className="animate-pulse">Cargando...</div>
+        </div>
+      )}
 
-        <motion.div
-          className={styles.scrollIndicator}
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            delay: 1.2,
-            duration: 0.5,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "reverse",
-          }}
-          onClick={scrollToContent}
-        >
-          <div className="flex flex-col items-center">
-            <ChevronDown className="w-8 h-8 animate-bounce" />
-          </div>
-        </motion.div>
-      </section>
-    </>
+      <motion.div
+        className={styles.scrollIndicator}
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          delay: 1.2,
+          duration: 0.5,
+          repeat: Number.POSITIVE_INFINITY,
+          repeatType: "reverse",
+        }}
+        onClick={scrollToContent}
+      >
+        <div className="flex flex-col items-center">
+          <ChevronDown className="w-8 h-8 animate-bounce" />
+        </div>
+      </motion.div>
+    </section>
   )
 }
-

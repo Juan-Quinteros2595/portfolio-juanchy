@@ -3,8 +3,10 @@
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
+import { useLanguage } from "@/context/language-context"
 
 export default function LifestylePhotography() {
+  const { t } = useLanguage()
   const [ref, inView] = useInView({
     triggerOnce: false,
     threshold: 0.1,
@@ -70,9 +72,9 @@ export default function LifestylePhotography() {
         className="max-w-4xl mx-auto relative z-10"
       >
         <motion.div variants={itemVariants} className="mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold">04</h2>
-          <h3 className="text-2xl md:text-3xl font-medium mt-2">LIFESTYLE AND ADVERTISING PRODUCT PHOTOGRAPHY</h3>
-          <p className="text-xl mt-4">FOCUS ON QUALITY AND TRUE PRODUCT REPRESENTATION. USABILITY AND DISPLAY.</p>
+          <h2 className="text-4xl md:text-5xl font-bold">{t("lifestyle.number")}</h2>
+          <h3 className="text-2xl md:text-3xl font-medium mt-2">{t("lifestyle.title")}</h3>
+          <p className="text-xl mt-4">{t("lifestyle.subtitle")}</p>
         </motion.div>
 
         {projects.map((project, index) => (
@@ -80,10 +82,10 @@ export default function LifestylePhotography() {
             <motion.div variants={itemVariants} className="mb-6">
               <h4 className="text-xl font-bold">{project.title}</h4>
               <p className="text-lg">
-                <span className="font-medium">Year:</span> {project.year}
+                <span className="font-medium">{t("ecommerce.year")}</span> {project.year}
               </p>
               <p className="text-lg">
-                <span className="font-medium">Client Information:</span> {project.client}
+                <span className="font-medium">{t("ecommerce.client")}</span> {project.client}
               </p>
               {project.description && <p className="text-lg mt-2">{project.description}</p>}
             </motion.div>
@@ -115,4 +117,3 @@ export default function LifestylePhotography() {
     </section>
   )
 }
-

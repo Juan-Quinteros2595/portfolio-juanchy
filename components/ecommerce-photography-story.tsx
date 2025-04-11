@@ -144,7 +144,7 @@ export default function EcommercePhotographyStory() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const index = parseInt(entry.target.getAttribute("data-index") || "0", 10)
+            const index = Number.parseInt(entry.target.getAttribute("data-index") || "0", 10)
             setActiveProject(index)
           }
         })
@@ -152,7 +152,7 @@ export default function EcommercePhotographyStory() {
       {
         root: null,
         threshold: 0.3,
-      }
+      },
     )
 
     const sections = sectionRef.current?.querySelectorAll(".project-section")
@@ -280,4 +280,3 @@ export default function EcommercePhotographyStory() {
     </section>
   )
 }
-

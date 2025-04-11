@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, ChevronDown } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
+import { useLanguage } from "@/context/language-context"
+import LanguageSwitcher from "./language-switcher"
 import styles from "@/styles/navbar.module.css"
 
 // Función para habilitar el scroll suave
@@ -24,6 +26,7 @@ export default function Navbar() {
   const projectsRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
   const router = useRouter()
+  const { t } = useLanguage() // Usamos el hook de idioma para traducir textos
 
   useEffect(() => {
     const handleScroll = () => {
@@ -85,11 +88,12 @@ export default function Navbar() {
     }
   }
 
+  // Datos de los proyectos con sus traducciones
   const projectItems = [
-    { name: "Content Creators", path: "/content-creators" },
-    { name: "Ecommerce Photography", path: "/ecommerce_photography" },
-    { name: "Lifestyle Photography", path: "/lifestyle_photography" },
-    { name: "Event Coverage", path: "/events" },
+    { name: t("projects.content"), path: "/content-creators" },
+    { name: t("projects.ecommerce"), path: "/ecommerce_photography" },
+    { name: t("projects.lifestyle"), path: "/lifestyle_photography" },
+    { name: t("projects.events"), path: "/events" },
   ]
 
   return (
@@ -108,7 +112,7 @@ export default function Navbar() {
         <div className="hidden md:flex space-x-8 items-center">
           <div className={styles.navLinkContainer}>
             <button onClick={() => scrollToSection("works")} className={styles.navLink}>
-              Trabajos
+              {t("nav.works")}
             </button>
             <span className={styles.linkUnderline}></span>
           </div>
@@ -117,7 +121,7 @@ export default function Navbar() {
           <div ref={projectsRef} className="relative">
             <div className={styles.navLinkContainer}>
               <button onClick={toggleProjects} className={`${styles.navLink} flex items-center`}>
-                Proyectos
+                {t("nav.projects")}
                 <ChevronDown
                   size={16}
                   className={`ml-1 transition-transform duration-300 ${projectsOpen ? "rotate-180" : ""}`}
@@ -138,7 +142,7 @@ export default function Navbar() {
                   <div className="py-2">
                     {projectItems.map((item) => (
                       <Link
-                        key={item.name}
+                        key={item.path}
                         href={item.path}
                         className={styles.dropdownItem}
                         onClick={() => {
@@ -157,16 +161,24 @@ export default function Navbar() {
 
           <div className={styles.navLinkContainer}>
             <button onClick={() => scrollToSection("contact")} className={styles.navLink}>
-              Contacto
+              {t("nav.contact")}
             </button>
             <span className={styles.linkUnderline}></span>
           </div>
+
+          {/* Añadimos el selector de idioma */}
+          <LanguageSwitcher />
         </div>
 
         {/* Mobile Navigation Toggle */}
-        <button onClick={toggleMenu} className="md:hidden text-white focus:outline-none p-2" aria-label="Toggle menu">
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="md:hidden flex items-center">
+          {/* Añadimos el selector de idioma en móvil */}
+          <LanguageSwitcher />
+
+          <button onClick={toggleMenu} className="text-white focus:outline-none p-2 ml-2" aria-label="Toggle menu">
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Navigation Menu */}
@@ -185,13 +197,13 @@ export default function Navbar() {
 
             <div className="mobile-menu-content">
               <button onClick={() => scrollToSection("works")} className="mobile-menu-link">
-                Trabajos
+                {t("nav.works")}
               </button>
 
               {/* Mobile Projects Dropdown */}
               <div className="flex flex-col items-center w-full max-w-[280px]">
                 <button onClick={toggleProjects} className="mobile-menu-link flex items-center justify-center gap-2">
-                  <span>Proyectos</span>
+                  <span>{t("nav.projects")}</span>
                   <ChevronDown
                     size={20}
                     className={`transition-transform duration-300 ${projectsOpen ? "rotate-180" : ""}`}
@@ -208,7 +220,7 @@ export default function Navbar() {
                       className="w-full flex flex-col items-center space-y-4 mt-4"
                     >
                       {projectItems.map((item) => (
-                        <Link key={item.name} href={item.path} className="mobile-menu-link" onClick={closeMenu}>
+                        <Link key={item.path} href={item.path} className="mobile-menu-link" onClick={closeMenu}>
                           {item.name}
                         </Link>
                       ))}
@@ -218,7 +230,7 @@ export default function Navbar() {
               </div>
 
               <button onClick={() => scrollToSection("contact")} className="mobile-menu-link">
-                Contacto
+                {t("nav.contact")}
               </button>
             </div>
           </motion.div>
@@ -227,4 +239,3 @@ export default function Navbar() {
     </motion.nav>
   )
 }
-

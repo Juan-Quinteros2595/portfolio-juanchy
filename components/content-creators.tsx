@@ -4,9 +4,11 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { useLanguage } from "@/context/language-context"
 import Image from "next/image"
 
 export default function ContentCreators() {
+  const { t } = useLanguage()
   const [ref, inView] = useInView({
     triggerOnce: false,
     threshold: 0.1,
@@ -233,7 +235,7 @@ export default function ContentCreators() {
                   </div>
                   <div className="p-3 text-center bg-gray-50">
                     <p className="text-sm text-blue-600 font-medium">
-                      {item.isInstagram ? "View Instagram Reel" : "View Video"}
+                      {item.isInstagram ? t("creators.openInsta") : "View Video"}
                     </p>
                   </div>
                 </motion.div>
@@ -261,4 +263,3 @@ export default function ContentCreators() {
     </section>
   )
 }
-
