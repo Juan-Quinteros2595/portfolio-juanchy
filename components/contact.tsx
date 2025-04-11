@@ -22,7 +22,7 @@ export default function Contact() {
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    // Set canvas dimensions
+    // Configurar las dimensiones del canvas
     const setCanvasDimensions = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
@@ -31,11 +31,12 @@ export default function Contact() {
     setCanvasDimensions()
     window.addEventListener("resize", setCanvasDimensions)
 
-    // Wave animation settings
+    // Configuración de la animación de ondas
     let time = 0
     const waveCount = Math.min(5, Math.max(2, Math.floor(window.innerWidth / 300))) // Ajustar según tamaño de pantalla
     const waves: Wave[] = []
 
+    // Clase Wave para representar una onda
     class Wave {
       amplitude: number
       period: number
@@ -51,55 +52,60 @@ export default function Contact() {
         this.lineWidth = lineWidth
       }
 
-      draw(ctx: CanvasRenderingContext2D, time: number) {
+      // Método para dibujar la onda en el canvas
+      draw(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, time: number) {
         ctx.beginPath()
         ctx.lineWidth = this.lineWidth
         ctx.strokeStyle = this.color
 
-        const height = canvas.height
-        const width = canvas.width
+        const height = canvas.height // Altura del canvas
+        const width = canvas.width // Ancho del canvas
 
-        ctx.moveTo(0, height / 2)
+        ctx.moveTo(0, height / 2) // Iniciar la línea en el centro vertical del canvas
 
-        const step = window.innerWidth < 768 ? 10 : 5 // Ajustar detalle según tamaño de pantalla
+        // Ajustar el detalle de la onda según el tamaño de la pantalla
+        const step = window.innerWidth < 768 ? 10 : 5
         for (let x = 0; x < width; x += step) {
+          // Calcular la posición vertical (y) usando una función seno
           const y = height / 2 + Math.sin(x / this.period + time + this.phase) * this.amplitude
           ctx.lineTo(x, y)
         }
 
-        ctx.stroke()
+        ctx.stroke() // Dibujar la línea
       }
     }
 
-    // Initialize waves
+    // Inicializar las ondas con valores aleatorios
     for (let i = 0; i < waveCount; i++) {
-      const amplitude = Math.random() * 50 + 30
-      const period = Math.random() * 200 + 100
-      const phase = Math.random() * Math.PI * 2
-      const opacity = Math.random() * 0.3 + 0.1
-      const lineWidth = Math.random() * 1.5 + 0.5
+      const amplitude = Math.random() * 50 + 30 // Amplitud aleatoria
+      const period = Math.random() * 200 + 100 // Periodo aleatorio
+      const phase = Math.random() * Math.PI * 2 // Fase aleatoria
+      const opacity = Math.random() * 0.3 + 0.1 // Opacidad aleatoria
+      const lineWidth = Math.random() * 1.5 + 0.5 // Grosor de línea aleatorio
 
       waves.push(new Wave(amplitude, period, phase, `rgba(255, 0, 0, ${opacity})`, lineWidth))
     }
 
-    // Animation loop
+    // Bucle de animación
     let animationFrameId: number
 
     function animate() {
-      if (!ctx) return
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      if (!ctx || !canvas) return
+      ctx.clearRect(0, 0, canvas.width, canvas.height) // Limpiar el canvas
 
-      time += 0.01
+      time += 0.01 // Incrementar el tiempo para animar las ondas
 
+      // Dibujar cada onda
       for (const wave of waves) {
-        wave.draw(ctx, time)
+        wave.draw(ctx, canvas, time) // Pasar el canvas como argumento
       }
 
-      animationFrameId = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate) // Continuar la animación
     }
 
     animate()
 
+    // Limpiar recursos al desmontar el componente
     return () => {
       window.removeEventListener("resize", setCanvasDimensions)
       cancelAnimationFrame(animationFrameId)
