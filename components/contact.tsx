@@ -151,7 +151,7 @@ export default function Contact() {
             <motion.div variants={containerVariants} className={styles.infoContainer}>
               <motion.div variants={itemVariants} className={styles.infoRow}>
                 <span className={styles.infoLabel}>{t("contact.whatsapp")}</span>
-                <span itemProp="telephone">+3465822698</span>
+                <span itemProp="telephone">+3333333333</span>
               </motion.div>
 
               <motion.div variants={itemVariants} className={styles.infoRow}>
