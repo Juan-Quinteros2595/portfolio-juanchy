@@ -1,8 +1,10 @@
 import type React from "react"
 import "@/app/globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { LanguageProvider } from "@/context/language-context"
-import Navbar from "@/components/navbar"
+import { LanguageProvider } from "@/features/i18n/language-context"
+import { getDictionary } from "@/lib/dictionary"
+import { i18n } from "@/config/i18n-config"
+import Navbar from "@/features/navigation/navbar"
 import Script from "next/script"
 
 export const metadata = {
@@ -41,11 +43,14 @@ export const metadata = {
     generator: 'v0.dev'
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  // Obtener el diccionario para el idioma por defecto
+  const dictionary = await getDictionary(i18n.defaultLocale)
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -60,8 +65,8 @@ export default function RootLayout({
       </head>
       <body className="font-montserrat">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          {/* Envolvemos la aplicación con el LanguageProvider */}
-          <LanguageProvider>
+          {/* Envolvemos la aplicación con el LanguageProvider y le pasamos el diccionario inicial */}
+          <LanguageProvider initialDictionary={dictionary} initialLocale={i18n.defaultLocale}>
             <Navbar />
             {children}
           </LanguageProvider>

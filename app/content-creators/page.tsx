@@ -1,4 +1,4 @@
-import ContentCreatorsPage from "@/components/content-creators-page"
+import ContentCreatorsPage from "@/features/content-creators/content-creators-page"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {

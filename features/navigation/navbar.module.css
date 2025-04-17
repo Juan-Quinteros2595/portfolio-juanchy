@@ -1,0 +1,66 @@
+.navbar {
+  @apply fixed 
+         top-0 
+         left-0 
+         right-0 
+         z-50 
+         transition-all 
+         duration-300;
+}
+
+.scrolled {
+  @apply bg-black 
+         bg-opacity-90 
+         backdrop-blur-md 
+         py-2;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.transparent {
+  @apply bg-transparent 
+         py-3 
+         sm:py-5;
+  /* Añadimos un borde sutil para hacer la navbar más visible */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  /* Añadimos un sutil gradiente para mejorar la visibilidad */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%);
+}
+
+.navLink {
+  @apply text-white 
+         hover:text-red-500 
+         transition-colors
+         relative;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* No podemos usar @apply con group, así que lo definimos directamente */
+.navLinkContainer {
+  position: relative;
+}
+
+.linkUnderline {
+  @apply absolute 
+         -bottom-1 
+         left-0 
+         w-0 
+         h-0.5 
+         bg-red-500 
+         transition-all 
+         duration-300;
+}
+
+/* Aplicamos el efecto hover directamente */
+.navLinkContainer:hover .linkUnderline {
+  width: 100%;
+}
+
+.dropdownMenu {
+  @apply absolute top-full left-0 mt-2 w-64 bg-black bg-opacity-90 backdrop-blur-md rounded-md overflow-hidden shadow-lg z-[9999];
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdownItem {
+  @apply block w-full text-left px-4 py-3 text-white hover:bg-gray-800 transition-colors;
+}

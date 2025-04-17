@@ -1,5 +1,5 @@
 // Importamos el tipo ClientCardProps desde el componente ClientCard
-import type { ClientCardProps } from "@/components/cards/client-card/ClientCard"
+import type { ClientCardProps } from "@/features/clients/client-card"
 
 /**
  * Array de clientes con sus datos

@@ -1,0 +1,101 @@
+.section {
+  @apply min-h-screen 
+         flex 
+         flex-col 
+         justify-center 
+         bg-white 
+         text-black 
+         p-4 
+         sm:p-6 
+         py-16 
+         sm:py-20 
+         relative;
+  max-width: 100vw;
+}
+
+.background {
+  @apply absolute 
+         inset-0 
+         bg-gradient-to-b 
+         from-gray-50 
+         to-white 
+         opacity-50 
+         z-0;
+}
+
+.worksContainer {
+  @apply max-w-4xl 
+         mx-auto 
+         relative 
+         z-10 
+         px-2 
+         sm:px-0;
+}
+
+.title {
+  @apply text-3xl 
+         sm:text-4xl 
+         md:text-5xl 
+         font-bold 
+         mb-6 
+         sm:mb-8;
+}
+
+.subtitle {
+  @apply text-xl 
+         sm:text-2xl 
+         md:text-3xl 
+         font-medium 
+         mb-8 
+         sm:mb-12;
+}
+
+.contentRow {
+  @apply flex 
+         flex-col 
+         md:flex-row 
+         gap-8 
+         my-12 
+         border-t-2 
+         border-black 
+         pt-8;
+}
+
+.imageContainer {
+  @apply md:w-1/2;
+}
+
+.image {
+  @apply w-full 
+         h-auto 
+         object-cover 
+         transition-transform 
+         duration-500 
+         hover:scale-105;
+}
+
+.textContainer {
+  @apply md:w-1/2 
+         flex 
+         flex-col 
+         justify-center;
+}
+
+.sectionTitle {
+  @apply text-2xl 
+         sm:text-3xl 
+         font-bold 
+         mb-4;
+}
+
+.text {
+  @apply text-base 
+         sm:text-lg 
+         mb-4;
+}
+
+.centeredText {
+  @apply mt-12 
+         sm:mt-16 
+         text-center;
+}

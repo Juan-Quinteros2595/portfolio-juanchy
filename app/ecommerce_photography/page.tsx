@@ -1,4 +1,4 @@
-import EcommercePhotographyStory from "@/components/ecommerce-photography-story"
+import EcommercePhotographyStory from "@/features/ecommerce-photography/ecommerce-photography-story"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {

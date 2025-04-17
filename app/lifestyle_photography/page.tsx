@@ -1,4 +1,4 @@
-import LifestylePhotographyStory from "@/components/lifestyle-photography-story"
+import LifestylePhotographyStory from "@/features/lifestyle-photography/lifestyle-photography-story"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {

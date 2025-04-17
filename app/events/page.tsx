@@ -1,4 +1,4 @@
-import EventCoverage from "@/components/event-coverage"
+import EventCoverage from "@/features/events/event-coverage"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {

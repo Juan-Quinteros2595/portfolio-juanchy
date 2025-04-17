@@ -1,0 +1,67 @@
+{
+  "layout.copyright": "All rights reserved",
+
+  "navbar.brand": "JNCH",
+  "navbar.menu.label": "Toggle menu",
+  "navbar.menu.title": "Navigation Menu",
+  "navbar.routes.works": "Works",
+  "navbar.routes.projects": "Projects",
+  "navbar.routes.contact": "Contact",
+  "navbar.projects.content": "Content Creators",
+  "navbar.projects.ecommerce": "Ecommerce Photography",
+  "navbar.projects.lifestyle": "Lifestyle Photography",
+  "navbar.projects.events": "Event Coverage",
+
+  "hero.words": "Design,Animate,Imagine,Illustrate,Refine,Collaborate,Innovate",
+
+  "works.title": "Works.",
+  "works.subtitle": "CREATIVE SOLUTIONS FOR BUSINESSES AND CREATORS",
+  "works.process.title": "Creative Process",
+  "works.process.text1": "At JNCH, we approach each project with passion and dedication. Our creative process involves understanding your brand, identifying your target audience, and crafting visual content that resonates with your message.",
+  "works.process.text2": "We combine technical expertise with artistic vision to deliver exceptional results that help your business stand out in today's competitive market.",
+  "works.support.text1": "We want you to feel supported every step of the way, ready to listen to your concerns, understand your needs, and work together toward the success of your project.",
+  "works.enhance.title": "We work to enhance your business",
+  "works.enhance.text1": "That is why we establish communication and build trust with our clients, as we believe it is essential to create strong business relationships. We greatly value those who trust our team and respond to that trust with products of exceptional quality.",
+  "works.enhance.text2": "At JNCH, we fully understand the challenges involved in investing in a project.",
+
+  "portfolio.title": "MY PORTFOLIO",
+  "portfolio.footer": "Designed by JNCH",
+
+  "clients.number": "01",
+  "clients.title": "HAPPY CLIENTS :)",
+  "clients.description": "Our clients speak for themselves.",
+  "clients.footer": "We work with the best brands and content creators, helping them stand out with high-quality photography and video.",
+
+  "contact.title": "LET'S WORK TOGETHER!",
+  "contact.whatsapp": "WhatsApp",
+  "contact.email": "E-mail",
+  "contact.office": "Head Office",
+  "contact.location.argentina": "Argentina, Buenos Aires",
+  "contact.location.spain": "Spain, Barcelona",
+
+  "creators.title": "Content Creators",
+  "creators.subtitle": "Specialized video content for brands and creators across multiple platforms",
+  "creators.all": "All",
+  "creators.cannabis": "Cannabis Content",
+  "creators.brands": "Brand Collaborations",
+  "creators.lifestyle": "Lifestyle",
+  "creators.events": "Events",
+  "creators.viewAll": "View all images",
+  "creators.openInsta": "Open in Instagram",
+
+  "ecommerce.number": "03",
+  "ecommerce.title": "ECOMMERCE PHOTOGRAPHY",
+  "ecommerce.subtitle": "FOCUS ON QUALITY AND TRUE PRODUCT REPRESENTATION",
+  "ecommerce.year": "Year:",
+  "ecommerce.client": "Client Information:",
+  "ecommerce.instagram": "Instagram:",
+  "ecommerce.viewGallery": "VIEW GALLERY",
+  "ecommerce.images": "images",
+
+  "lifestyle.number": "04",
+  "lifestyle.title": "LIFESTYLE AND ADVERTISING PRODUCT PHOTOGRAPHY",
+  "lifestyle.subtitle": "FOCUS ON QUALITY AND TRUE PRODUCT REPRESENTATION. USABILITY AND DISPLAY.",
+
+  "events.viewGallery": "VIEW GALLERY",
+  "events.images": "images"
+}

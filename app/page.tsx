@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
-import Hero from "@/components/hero"
-import Works from "@/components/works"
-import HappyClientsSlider from "@/components/happy-clients-slider"
-import Contact from "@/components/contact"
-import PortfolioNav from "@/components/portfolio-nav"
+import Hero from "@/features/hero/hero"
+import Works from "@/features/works/works"
+import HappyClientsSlider from "@/features/clients/happy-clients-slider"
+import Contact from "@/features/contact/contact"
+import PortfolioNav from "@/features/portfolio/portfolio-nav"
 
 export const metadata: Metadata = {
   title: "JNCH Portfolio | Filmmaker y Fotógrafo entre Argentina y España",
