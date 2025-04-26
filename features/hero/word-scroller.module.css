@@ -22,7 +22,8 @@
 }
 
 .jnchText {
-  font-size: 5rem;
+  font-family: 'Gobold Hollow';
+  font-size: 7rem;
   font-weight: 800;
   color: white;
   margin: 0;
@@ -52,6 +53,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  font-family: 'Argentum Sans';
   font-size: 5rem;
   font-weight: 700;
   line-height: 1;

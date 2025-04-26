@@ -101,7 +101,7 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
         {/* Brand */}
-        <Link href="/" className="text-white font-bold text-xl" onClick={closeMenu}>
+        <Link href="/" className="text-white font-samsungsans text-xl" onClick={closeMenu}>
           {dictionary["navbar.brand"]}
         </Link>
 

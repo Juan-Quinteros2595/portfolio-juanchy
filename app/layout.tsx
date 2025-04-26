@@ -63,7 +63,7 @@ export default async function RootLayout({
         />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className="font-montserrat">
+      <body className="font-argentum">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           {/* Envolvemos la aplicación con el LanguageProvider y le pasamos el diccionario inicial */}
           <LanguageProvider initialDictionary={dictionary} initialLocale={i18n.defaultLocale}>
@@ -197,6 +197,5 @@ export default async function RootLayout({
     </html>
   )
 }
-
 
 import './globals.css'

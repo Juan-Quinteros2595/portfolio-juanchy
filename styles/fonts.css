@@ -1,0 +1,45 @@
+/* GOBOLD HOLLOW - Para el logo */
+@font-face {
+    font-family: 'Gobold Hollow';
+    src: url('/public/fonts/gobold-hollow/gobold-hollow.woff2') format('woff2'),
+        url('/public/fonts/gobold-hollow/gobold-hollow.woff') format('woff'),
+        url('/public/fonts/gobold-hollow/gobold-hollow.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Argentum Sans - Para textos generales */
+@font-face {
+    font-family: 'Argentum Sans';
+    src: url('/public/fonts/Argentum-Sans/ArgentumSans.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Argentum Sans';
+    src: url('/public/fonts/Argentum-Sans/ArgentumSans-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Argentum Sans';
+    src: url('/public/fonts/Argentum-Sans/ArgentumSans-bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Samsung Sans - Para títulos en rojo */
+@font-face {
+    font-family: 'Samsung Sans';
+    src: url('/public/fonts/samsungsans/samsungsans-Bold.woff2') format('woff2'),
+        url('/public/fonts/samsungsans/samsungsans-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

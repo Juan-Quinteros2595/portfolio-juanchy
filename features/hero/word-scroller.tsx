@@ -89,7 +89,9 @@ export default function WordScroller({ words = [], activeIndex, onActiveWordChan
           {words.map((word, index) => (
             <div
               key={index}
-              ref={(el) => (wordRefs.current[index] = el)}
+              ref={(el) => {
+                wordRefs.current[index] = el;
+              }}
               className={styles.wordItem}
               style={{
                 color: activeIndex === index ? colors[index % colors.length] : "rgba(255, 255, 255, 0.2)",

@@ -4,6 +4,7 @@ import Works from "@/features/works/works"
 import HappyClientsSlider from "@/features/clients/happy-clients-slider"
 import Contact from "@/features/contact/contact"
 import PortfolioNav from "@/features/portfolio/portfolio-nav"
+import FormC from "@/features/formulario/"
 
 export const metadata: Metadata = {
   title: "JNCH Portfolio | Filmmaker y Fotógrafo entre Argentina y España",
@@ -27,7 +28,7 @@ export default function Home() {
         <HappyClientsSlider />
       </section>
       <section id="contact">
-        <Contact />
+        <FormC />
       </section>
     </main>
   )
