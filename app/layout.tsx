@@ -6,6 +6,7 @@ import { getDictionary } from "@/lib/dictionary"
 import { i18n } from "@/config/i18n-config"
 import Navbar from "@/features/navigation/navbar"
 import Script from "next/script"
+import RecaptchaProvider from "@/components/recaptcha-provider"
 
 export const metadata = {
   title: "Juanchy Creativity | Filmmaker & Photographer | Argentina-Spain",
@@ -67,8 +68,10 @@ export default async function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           {/* Envolvemos la aplicación con el LanguageProvider y le pasamos el diccionario inicial */}
           <LanguageProvider initialDictionary={dictionary} initialLocale={i18n.defaultLocale}>
-            <Navbar />
-            {children}
+            <RecaptchaProvider>
+              <Navbar />
+              {children}
+            </RecaptchaProvider>
           </LanguageProvider>
         </ThemeProvider>
 

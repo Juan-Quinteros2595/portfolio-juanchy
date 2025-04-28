@@ -5,10 +5,14 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import { Send } from "lucide-react"
 import { motion } from "framer-motion"
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3"
 import styles from "./formc.module.css"
 
 // Importar el componente DisintegrateText
 import { DisintegrateText } from "./DisintegrateText"
+import type { FormData, SubmitStatus, ValidationErrors } from "@/types/form"
+import { fetchWithTimeout, FetchError } from '@/utils/fetch';
+
 
 interface Wave {
   amplitude: number
@@ -23,12 +27,103 @@ export default function FormC() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const contactCanvasRef = useRef<HTMLCanvasElement>(null)
   const waveCanvasRef = useRef<HTMLCanvasElement>(null)
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     phone: "",
     idea: "",
   })
+
+  // Nuevos estados para manejar el envío del formulario
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>({
+    success: undefined,
+    message: undefined,
+  })
+  // Estado para manejar la disponibilidad de reCAPTCHA
+  const [recaptchaAvailable, setRecaptchaAvailable] = useState(false)
+    // Estado para manejar errores de validación
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({
+    name: "",
+    email: "",
+    idea: "",
+  })
+
+  // Estado para rastrear campos tocados
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({
+    name: false,
+    email: false,
+    idea: false,
+  })
+
+  // Hook de reCAPTCHA
+  const { executeRecaptcha } = useGoogleReCaptcha()
+
+  useEffect(() => {
+    const recaptchaKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+    if (executeRecaptcha && recaptchaKey) {
+      setRecaptchaAvailable(true)
+    }
+  }, [executeRecaptcha])
+
+    // Validar campos en tiempo real
+  useEffect(() => {
+    validateField("name", formData.name)
+    validateField("email", formData.email)
+    validateField("idea", formData.idea)
+  }, [formData])
+
+  // Función para validar un campo específico
+  const validateField = (field: keyof ValidationErrors, value: string) => {
+    let error = ""
+
+    if (!touchedFields[field]) return
+
+    switch (field) {
+      case "name":
+        if (!value.trim()) {
+          error = "El nombre es requerido"
+        } else if (value.trim().length < 2) {
+          error = "El nombre debe tener al menos 2 caracteres"
+        }
+        break
+      case "email":
+        if (!value.trim()) {
+          error = "El email es requerido"
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          error = "Por favor ingresa un email válido"
+        }
+        break
+      case "idea":
+        if (!value.trim()) {
+          error = "Por favor cuéntanos sobre tu proyecto"
+        } else if (value.trim().length < 10) {
+          error = "Por favor proporciona más detalles (mínimo 10 caracteres)"
+        }
+        break
+    }
+
+    setValidationErrors((prev) => ({
+      ...prev,
+      [field]: error,
+    }))
+
+    return error === ""
+  }
+
+  // Marcar un campo como tocado
+  const handleBlur = (field: keyof ValidationErrors) => {
+    setTouchedFields((prev) => ({
+      ...prev,
+      [field]: true,
+    }))
+    validateField(field, formData[field] as string)
+  }
+
+  // Verificar si el formulario es válido
+  const isFormValid = () => {
+    return !validationErrors.name && !validationErrors.email && !validationErrors.idea
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -156,15 +251,97 @@ export default function FormC() {
     }
   }, [])
 
+    // Nueva función handleSubmit que envía los datos a la API de Resend
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
+        // Marcar todos los campos como tocados para mostrar errores
+    setTouchedFields({
+      name: true,
+      email: true,
+      idea: true,
+    })
+
+    // Validar todos los campos
+    const nameValid = validateField("name", formData.name)
+    const emailValid = validateField("email", formData.email)
+    const ideaValid = validateField("idea", formData.idea)
+
+    // Si hay errores, no enviar el formulario
+    if (!nameValid || !emailValid || !ideaValid) {
+      setSubmitStatus({
+        success: false,
+        message: "Por favor corrige los errores antes de enviar el formulario",
+      })
+      return
+    }
+    setIsSubmitting(true);
+    setSubmitStatus({})
+    
     try {
-      console.log("Form submitted:", formData)
+      // Añadir un retraso artificial para probar el loader (quitar en producción)
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+
+      let recaptchaToken = null;
+      
+      if (recaptchaAvailable && executeRecaptcha) {
+        try {
+          recaptchaToken = await executeRecaptcha("contact_form");
+          if (!recaptchaToken) {
+            throw new Error("Error en la verificación de reCAPTCHA");
+          }
+        } catch (error) {
+          throw new Error("Error en la verificación de seguridad. Por favor, inténtalo de nuevo.");
+        }
+      }
+
+      // Enviar datos del formulario junto con el token de reCAPTCHA
+      const response = await fetchWithTimeout("/api/send", {  
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          recaptchaToken,
+          bypassRecaptcha: !recaptchaToken,
+        }),
+      });
+
+      let data;
+      try {
+        const contentType = response.headers.get("Content-Type");
+        if (contentType && contentType.includes("application/json")) {
+          data = await response.json();
+        } else {
+          throw new Error("Unexpected response format");
+        }
+      } catch (error) {
+        throw new Error("Failed to parse server response");
+      }
+
+      if (!response.ok) {
+        throw new Error(data.error || "Error al enviar el mensaje")
+      }
+
+      // Éxito
+      setSubmitStatus({
+        success: true,
+        message: "¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.",
+      })
       setFormData({ name: "", email: "", phone: "", idea: "" })
-      alert("Message sent successfully!")
-    } catch (error) {
-      console.error("Error sending message:", error)
-      alert("Failed to send message. Please try again.")
+      // Resetear campos tocados
+      setTouchedFields({
+        name: false,
+        email: false,
+        idea: false,
+      })
+    } catch (error: any) {
+      setSubmitStatus({
+        success: false,
+        message: error.message || "Error al enviar el mensaje. Por favor, inténtalo de nuevo.",
+      })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -175,10 +352,21 @@ export default function FormC() {
       [name]: value,
     }))
   }
+  // Añadir logs para depuración
+  useEffect(() => {
+  }, [isSubmitting])
 
   return (
     <section className={styles.section} id="contact">
       <canvas ref={waveCanvasRef} className={styles.waveCanvas} />
+      {/* Mostrar advertencia si reCAPTCHA no está disponible */}
+      {!recaptchaAvailable && (
+        <div className="fixed top-0 left-0 right-0 bg-yellow-100 text-yellow-800 p-2 text-center text-sm z-50">
+          Advertencia: La protección reCAPTCHA no está disponible. El formulario funcionará, pero con menor protección
+          contra spam.
+        </div>
+      )}
+      {/* Mostrar pantalla de carga durante el envío */}
 
       <div className={styles.container}>
         <motion.div
@@ -206,10 +394,15 @@ export default function FormC() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
+                onBlur={() => handleBlur("name")}
                 placeholder="NAME"
-                className={styles.input}
+                className={`${styles.input} ${touchedFields.name && validationErrors.name ? styles.inputError : ""}`}
                 required
+                disabled={isSubmitting}
               />
+              {touchedFields.name && validationErrors.name && (
+                <div className={styles.errorMessage}>{validationErrors.name}</div>
+              )}
             </motion.div>
 
             <motion.div
@@ -223,10 +416,15 @@ export default function FormC() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
+                onBlur={() => handleBlur("email")}
                 placeholder="EMAIL"
-                className={styles.input}
+                className={`${styles.input} ${touchedFields.email && validationErrors.email ? styles.inputError : ""}`}
                 required
+                disabled={isSubmitting}
               />
+              {touchedFields.email && validationErrors.email && (
+                <div className={styles.errorMessage}>{validationErrors.email}</div>
+              )}
             </motion.div>
 
             <motion.div
@@ -242,6 +440,7 @@ export default function FormC() {
                 onChange={handleChange}
                 placeholder="PHONE"
                 className={styles.input}
+                disabled={isSubmitting}
               />
             </motion.div>
 
@@ -267,12 +466,32 @@ export default function FormC() {
                 name="idea"
                 value={formData.idea}
                 onChange={handleChange}
+                onBlur={() => handleBlur("idea")}
                 placeholder="TELL US ABOUT YOUR PROJECT"
                 rows={3}
-                className={`${styles.input} ${styles.textarea}`}
+                className={`${styles.input} ${styles.textarea} ${
+                  touchedFields.idea && validationErrors.idea ? styles.inputError : ""
+                }`}
                 required
+                disabled={isSubmitting}
               />
+              {touchedFields.idea && validationErrors.idea && (
+                <div className={styles.errorMessage}>{validationErrors.idea}</div>
+              )}
             </motion.div>
+
+            {/* Nuevo: Mostrar mensaje de éxito o error */}
+            {submitStatus.message && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`p-3 rounded-md text-center ${
+                  submitStatus.success ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                }`}
+              >
+                {submitStatus.message}
+              </motion.div>
+            )}
 
             <motion.button
               type="submit"
@@ -282,11 +501,45 @@ export default function FormC() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className={`${styles["animated-border-button"]} ${styles.submitButton}`}
+              disabled={isSubmitting}
             >
               <div className={styles["button-background"]} />
+              {/* Renderizado condicional: muestra la barra de progreso o el texto del botón */}
+              {isSubmitting ? (
+              // Cuando isSubmitting es true, muestra la barra de progreso
+              <div className={styles.progressBarContainer}>
+                  <div className={styles.progressBar}></div>
+              </div>
+              ) : (
+              // Cuando isSubmitting es false, muestra el texto y el icono
+              <>
               <span>SEND MESSAGE</span>
               <Send size={18} />
+              </>
+              )}
             </motion.button>
+            {/* Nota de protección reCAPTCHA */}
+            <div className="text-xs text-center text-gray-500 mt-4">
+              Este sitio está protegido por reCAPTCHA y aplican la{" "}
+              <a
+                href="https://policies.google.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline"
+              >
+                Política de Privacidad
+              </a>{" "}
+              y los{" "}
+              <a
+                href="https://policies.google.com/terms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline"
+              >
+                Términos de Servicio
+              </a>{" "}
+              de Google.
+            </div>
           </form>
         </div>
       </div>

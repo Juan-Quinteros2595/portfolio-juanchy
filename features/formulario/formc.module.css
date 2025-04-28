@@ -213,3 +213,75 @@
   -webkit-text-stroke: 2px #ff0000;
   text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
 }
+
+/* Estilos para los mensajes de error */
+.inputError {
+  border-color: #ff3333 !important;
+  box-shadow: 0 0 5px rgba(255, 51, 51, 0.5) !important;
+}
+
+.errorMessage {
+  color: #ff3333;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  animation: fadeIn 0.3s ease-in-out;
+  position: absolute;
+  left: 0;
+  bottom: -1.2rem;
+  width: 100%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilos para la barra de progreso */
+.progressBarContainer {
+  /* Contenedor principal que ocupa todo el ancho del botón */
+  position: relative;
+  width: 100%;
+  height: 6px;
+  /* Altura de la barra - ajustable según preferencia */
+  background-color: rgba(255, 255, 255, 0.2);
+  /* Fondo semi-transparente */
+  border-radius: 3px;
+  /* Bordes redondeados */
+  overflow: hidden;
+  /* Oculta la parte de la barra que sale del contenedor */
+}
+
+.progressBar {
+  /* La barra blanca que se mueve */
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 25%;
+  /* Ancho de la barra móvil - 25% del contenedor */
+  background-color: white;
+  /* Color de la barra - puedes cambiarlo */
+  border-radius: 3px;
+  /* Animación que mueve la barra de izquierda a derecha */
+  animation: progressAnimation 1.5s infinite linear;
+}
+
+/* Keyframes para la animación de la barra */
+@keyframes progressAnimation {
+  0% {
+    left: -25%;
+    /* Comienza fuera del contenedor por la izquierda */
+  }
+
+  100% {
+    left: 100%;
+    /* Termina fuera del contenedor por la derecha */
+  }
+}
