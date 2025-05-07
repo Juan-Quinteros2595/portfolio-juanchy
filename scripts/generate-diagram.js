@@ -11,54 +11,92 @@ import { promisify } from "util"
 const execAsync = promisify(exec)
 
 async function generateDiagram() {
-  console.log("Generando diagrama de dependencias del proyecto...")
+  console.log("🔍 Analizando estructura del proyecto...")
 
   try {
-    // Instalar Graphviz si es necesario (comentado porque asumimos que ya está instalado)
-    // await execAsync('npm install -g graphviz');
-
-    // Crear instancia de Madge para analizar el proyecto
-    const madgeInstance = await madge("./app", {
+    // Configuración específica para Next.js
+    const madgeInstance = await madge(".", {
       baseDir: "./",
       includeNpm: false,
       fileExtensions: ["js", "jsx", "ts", "tsx"],
-      excludeRegExp: [/node_modules/, /\.next/, /\.git/, /\.vscode/],
+      excludeRegExp: [
+        /node_modules/,
+        /\.next/,
+        /\.git/,
+        /\.vscode/,
+        /public/,
+        /styles/,
+        /\.env/,
+        /package\.json/,
+        /tsconfig\.json/,
+        /next\.config\.js/
+      ],
+      // Incluir directorios específicos de tu proyecto
+      entryFiles: ["./app/**/*", "./components/**/*", "./features/**/*", "./utils/**/*"]
     })
 
-    // Generar el diagrama en formato SVG
-    const svg = await madgeInstance.svg()
+    console.log("📊 Generando diagrama SVG...")
 
-    // Guardar el diagrama en un archivo
-    writeFileSync("./public/project-diagram.svg", svg)
+    // Configurar el estilo del diagrama
+    const svg = await madgeInstance.svg({
+      fontSize: "12px",
+      backgroundColor: "#ffffff",
+      nodeColor: "#333333",
+      noDependencyColor: "#666666",
+      layout: "dot"
+    })
 
-    console.log("Diagrama generado con éxito en ./public/project-diagram.svg")
-    console.log("Estructura del proyecto:")
+    // Guardar el diagrama
+    const outputPath = "./docs/project-diagram.svg"
+    writeFileSync(outputPath, svg)
 
-    // Mostrar la estructura de dependencias en la consola
+    console.log("\n✅ Análisis completado:")
+    
+    // Mostrar estadísticas
     const dependencyGraph = madgeInstance.obj()
     const modules = Object.keys(dependencyGraph)
+    
+    console.log(`\n📁 Total de módulos: ${modules.length}`)
+    console.log("\n🔍 Módulos principales:")
+    
+    // Agrupar módulos por directorio
+    const groupedModules = modules.reduce((acc, module) => {
+      const directory = module.split('/')[0]
+      if (!acc[directory]) acc[directory] = []
+      acc[directory].push(module)
+      return acc
+    }, {})
 
-    console.log("\nMódulos principales:")
-    modules.forEach((module) => {
-      console.log(`- ${module} (${dependencyGraph[module].length} dependencias)`)
+    // Mostrar módulos agrupados
+    Object.entries(groupedModules).forEach(([directory, files]) => {
+      console.log(`\n📂 ${directory} (${files.length} archivos)`)
+      files.forEach(file => {
+        const deps = dependencyGraph[file]
+        console.log(`  └─ ${file} (${deps.length} dependencias)`)
+      })
     })
 
-    // Generar estadísticas
-    const circularDependencies = madgeInstance.circular()
-    console.log(`\nDependencias circulares: ${circularDependencies.length}`)
-    if (circularDependencies.length > 0) {
-      console.log("Detalles de dependencias circulares:")
-      circularDependencies.forEach((deps, i) => {
-        console.log(`  ${i + 1}. ${deps.join(" -> ")} -> ${deps[0]}`)
+    // Verificar dependencias circulares
+    const circular = madgeInstance.circular()
+    if (circular.length > 0) {
+      console.log("\n⚠️ Dependencias circulares detectadas:")
+      circular.forEach((path, i) => {
+        console.log(`  ${i + 1}. ${path.join(" → ")} → ${path[0]}`)
       })
+    } else {
+      console.log("\n✅ No se detectaron dependencias circulares")
     }
 
-    return "Diagrama generado con éxito"
+    console.log(`\n📄 Diagrama guardado en: ${outputPath}`)
+    return "Diagrama generado exitosamente"
+
   } catch (error) {
-    console.error("Error al generar el diagrama:", error)
-    return `Error: ${error.message}`
+    console.error("\n❌ Error al generar el diagrama:", error)
+    throw error
   }
 }
 
 // Ejecutar la función
 generateDiagram()
+  .then(() => process.exit(0))
+  .catch(() => process.exit(1))

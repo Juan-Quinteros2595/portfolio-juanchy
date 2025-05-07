@@ -7,6 +7,7 @@ import { i18n } from "@/config/i18n-config"
 import Navbar from "@/features/navigation/navbar"
 import Script from "next/script"
 import RecaptchaProvider from "@/components/recaptcha-provider"
+import Preloader from "@/components/preloader/preloader"
 
 export const metadata = {
   title: "Juanchy Creativity | Filmmaker & Photographer | Argentina-Spain",
@@ -69,6 +70,7 @@ export default async function RootLayout({
           {/* Envolvemos la aplicación con el LanguageProvider y le pasamos el diccionario inicial */}
           <LanguageProvider initialDictionary={dictionary} initialLocale={i18n.defaultLocale}>
             <RecaptchaProvider>
+              <Preloader />
               <Navbar />
               {children}
             </RecaptchaProvider>
