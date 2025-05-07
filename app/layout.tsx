@@ -4,10 +4,12 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/features/i18n/language-context"
 import { getDictionary } from "@/lib/dictionary"
 import { i18n } from "@/config/i18n-config"
-import Navbar from "@/features/navigation/navbar"
 import Script from "next/script"
 import RecaptchaProvider from "@/components/recaptcha-provider"
 import Preloader from "@/components/preloader/preloader"
+import ConditionalNavbar from "@/components/conditional-navbar"
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
 
 export const metadata = {
   title: "Juanchy Creativity | Filmmaker & Photographer | Argentina-Spain",
@@ -71,7 +73,7 @@ export default async function RootLayout({
           <LanguageProvider initialDictionary={dictionary} initialLocale={i18n.defaultLocale}>
             <RecaptchaProvider>
               <Preloader />
-              <Navbar />
+              <ConditionalNavbar />
               {children}
             </RecaptchaProvider>
           </LanguageProvider>

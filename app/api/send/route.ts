@@ -5,12 +5,10 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(req: Request) {
   try {
-    console.log('⌛ Procesando petición...');
     const { name, email, phone, idea, recaptchaToken, bypassRecaptcha } = await req.json();
 
     // Validar API key de Resend
     if (!process.env.RESEND_API_KEY) {
-      console.error('❌ Falta RESEND_API_KEY');
       return NextResponse.json(
         { error: "Error de configuración del servidor" },
         { status: 500 }
@@ -74,15 +72,12 @@ export async function POST(req: Request) {
       });
 
       if (error) {
-        console.error("❌ Error al enviar email:", error);
         throw new Error(error.message);
       }
 
-      console.log('✅ Email enviado correctamente');
       return NextResponse.json({ success: true, data });
 
     } catch (emailError) {
-      console.error("❌ Error en Resend:", emailError);
       return NextResponse.json(
         { error: "Error al enviar el email. Por favor, inténtalo de nuevo." },
         { status: 500 }
@@ -90,7 +85,6 @@ export async function POST(req: Request) {
     }
 
   } catch (error) {
-    console.error('❌ Error general en la API:', error);
     return NextResponse.json(
       { 
         error: error instanceof Error 
