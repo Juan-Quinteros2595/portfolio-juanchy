@@ -59,7 +59,7 @@ export async function POST(req: Request) {
     // Enviar el email con mejor manejo de errores
     try {
       const { data, error } = await resend.emails.send({
-        from: "Portfolio Contact <onboarding@resend.dev>",
+        from: "Portfolio Contact <noreply@jnch.media>",
         to: [process.env.EMAIL_TO || "tu-email@ejemplo.com"],
         subject: `Nuevo mensaje de contacto de ${name}`,
         html: `
