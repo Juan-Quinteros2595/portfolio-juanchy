@@ -20,13 +20,13 @@ const enableSmoothScroll = () => {
 }
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false) // Solo para mobile
+  const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [projectsOpen, setProjectsOpen] = useState(false)
   const projectsRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
   const router = useRouter()
-  const { dictionary } = useLanguage()
+  const { dictionary } = useLanguage() // Usamos el hook de idioma para obtener el diccionario
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,7 +50,15 @@ export default function Navbar() {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen)
-    setProjectsOpen(false) // Aseguramos que el submenú también se cierre
+    // Si cerramos el menú principal, también cerramos el submenú de proyectos
+    if (!isOpen === false) {
+      setProjectsOpen(false)
+    }
+  }
+
+  const toggleProjects = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setProjectsOpen(!projectsOpen)
   }
 
   const closeMenu = () => {
@@ -88,10 +96,6 @@ export default function Navbar() {
     { name: dictionary["navbar.projects.events"], path: "/events" },
   ]
 
-  const toggleProjects = () => {
-    setProjectsOpen(!projectsOpen)
-  }
-
   return (
     <motion.nav
       initial={{ opacity: 0, y: -20 }}
@@ -100,8 +104,7 @@ export default function Navbar() {
       className={`${styles.navbar} ${scrolled ? styles.scrolled : styles.transparent}`}
     >
       <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
-        {/* Brand */}
-        <Link href="/" className="text-white font-samsungsans text-xl" onClick={closeMenu}>
+        <Link href="/" className="text-white font-bold text-xl" onClick={closeMenu}>
           {dictionary["navbar.brand"]}
         </Link>
 
@@ -113,7 +116,7 @@ export default function Navbar() {
             </button>
             <span className={styles.linkUnderline}></span>
           </div>
-    
+
           {/* Proyectos Dropdown */}
           <div ref={projectsRef} className="relative">
             <div className={styles.navLinkContainer}>
@@ -143,8 +146,8 @@ export default function Navbar() {
                         href={item.path}
                         className={styles.dropdownItem}
                         onClick={() => {
-                          closeMenu();
-                          enableSmoothScroll();
+                          closeMenu()
+                          enableSmoothScroll()
                         }}
                       >
                         {item.name}
@@ -162,13 +165,16 @@ export default function Navbar() {
             </button>
             <span className={styles.linkUnderline}></span>
           </div>
+
           {/* Añadimos el selector de idioma */}
           <LanguageSwitcher />
         </div>
 
         {/* Mobile Navigation Toggle */}
         <div className="md:hidden flex items-center">
+          {/* Añadimos el selector de idioma en móvil */}
           <LanguageSwitcher />
+
           <button
             onClick={toggleMenu}
             className="text-white focus:outline-none p-2 ml-2"
@@ -179,7 +185,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Navigation Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -200,11 +206,11 @@ export default function Navbar() {
 
               {/* Mobile Projects Dropdown */}
               <div className="flex flex-col items-center w-full max-w-[280px]">
-                <button onClick={() => setProjectsOpen(!projectsOpen)} className="mobile-menu-link flex items-center justify-center gap-2">
+                <button onClick={toggleProjects} className="mobile-menu-link flex items-center justify-center gap-2">
                   <span>{dictionary["navbar.routes.projects"]}</span>
                   <ChevronDown
                     size={20}
-                    className={`transition-transform duration-300 ${projectsOpen ? "rotate-180" : ""}`}
+                    className={`ml-1 transition-transform duration-300 ${projectsOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 

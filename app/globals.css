@@ -126,18 +126,34 @@ html.smooth-scroll {
   scrollbar-width: none; /* Firefox */
 }
 
-/* Estilos para el menú móvil */
+/* Estilos para el menú móvil - Versión minimalista */
 .mobile-menu {
   position: fixed;
   inset: 0;
   z-index: 50;
-  backdrop-filter: blur(8px);
+  background-color: rgba(0, 0, 0, 0.95);
+  /* Fondo sólido */
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   height: 100vh;
   width: 100vw;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.mobile-menu-close:hover {
+  color: #ef4444;
+  /* Color rojo de Tailwind */
 }
 
 .mobile-menu-content {
@@ -147,21 +163,48 @@ html.smooth-scroll {
   align-items: center;
   height: 100%;
   padding: 2rem;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .mobile-menu-link {
   font-size: 1.25rem;
   font-weight: 500;
-  padding: 0.75rem 0;
+  padding: 0.75rem 1rem;
   text-align: center;
-  transition: color 0.2s;
+  transition: all 0.2s;
   width: 100%;
   max-width: 280px;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* Borde muy ligero */
+  border-radius: 4px;
+  background: transparent;
+  position: relative;
+}
+
+.mobile-menu-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background-color: #ef4444;
+  /* Color rojo de Tailwind */
+  transition: all 0.2s ease;
+  transform: translateX(-50%);
 }
 
 .mobile-menu-link:hover {
-  color: #ef4444;
+  color: white;
+  /* Mantener el color del texto */
+  border-color: rgba(255, 255, 255, 0.2);
+  /* Borde ligeramente más visible en hover */
+}
+
+.mobile-menu-link:hover::after {
+  width: 80%;
+  /* Línea que aparece en hover */
 }
 
 .mobile-menu-dropdown {
@@ -172,14 +215,6 @@ html.smooth-scroll {
   width: 100%;
   max-width: 280px;
 }
-
-.mobile-menu-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  padding: 0.5rem;
-}
-
 .sr-only {
   position: absolute;
   width: 1px;
