@@ -40,7 +40,6 @@ export default function Hero() {
   // Manejador para cuando cambia la palabra activa
   const handleActiveWordChange = (index: number) => {
     if (index !== activeWordIndex) {
-      console.log(`Hero: Word changed to ${index}, applying video ${index % backgroundMedia.length}`);
       setActiveWordIndex(index);
     }
   };

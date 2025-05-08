@@ -145,7 +145,7 @@ export function DisintegrateText() {
             className="inline-block"
           >
             <h2 
-            style={{ fontFamily: '"Pragmatica Extended", sans-serif' }}
+            style={{ fontFamily: '"Pragmatica Extended"' }}
             className="text-2xl font-bold text-red-600">{PHRASES[currentPhraseIndex]}</h2>
           </motion.div>
         </AnimatePresence>

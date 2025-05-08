@@ -80,7 +80,7 @@
     min-height: 100vh;
     overflow-x: hidden; /* Prevenir scroll horizontal */
     max-width: 100vw;
-    font-family: 'Argentum Sans', sans-serif;
+    font-family: 'Argentum Sans';
   }
   html {
     width: 100%;
@@ -91,7 +91,7 @@
 }
 
 .font-montserrat {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Montserrat";
 }
 
 /* Estilos para scroll suave */

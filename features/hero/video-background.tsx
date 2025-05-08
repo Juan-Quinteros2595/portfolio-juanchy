@@ -44,7 +44,6 @@ export default function VideoBackground({ media, activeIndex = 0 }: VideoBackgro
 
     // Si el índice activo es diferente del actual
     if (activeIndex !== currentIndex) {
-      console.log(`Video changing from ${currentIndex} to ${activeIndex}`)
       lastChangeTimeRef.current = now
       setIsTransitioning(true)
 
@@ -86,7 +85,9 @@ export default function VideoBackground({ media, activeIndex = 0 }: VideoBackgro
         >
           {item.type === "video" ? (
             <video
-              ref={(el) => (videoRefs.current[index] = el)}
+              ref={(el) => {
+                videoRefs.current[index] = el;
+              }}
               src={item.src}
               className={styles.video}
               autoPlay
