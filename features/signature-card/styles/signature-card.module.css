@@ -36,10 +36,18 @@
     align-items: center;
 }
 
-.logoCanvas {
-    margin-bottom: 0.5rem;
-    /* Ajuste para el logo con contorno */
-    filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.3));
+/* Profile Image Styles */
+.profileImageContainer {
+    position: relative;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.profileImage {
+    border-radius: 0.5rem;
+    object-fit: cover;
+    display: block; 
 }
 
 .title {

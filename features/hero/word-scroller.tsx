@@ -79,11 +79,19 @@ export default function WordScroller({ words = [], activeIndex, onActiveWordChan
     }
   }, [activeIndex]); // Centramos la palabra activa cuando cambia el índice
 
+    // Función para dividir el título en letras individuales
+    const renderStyledTitle = (text: string) => {
+      return text.split("").map((letter, index) => (
+        <span key={index} className={styles.letter}>
+          {letter}
+        </span>
+      ))
+    }
+
   return (
     <div ref={containerRef} className={styles.container}>
       <div className={styles.content}>
-        <h1 className={styles.jnchText}>JNCH</h1>
-
+        <h1 className={styles.jnchText}>{renderStyledTitle("JNCH")}</h1>
         <div ref={scrollContainerRef} className={styles.scrollContainer} style={{ scrollSnapType: "y mandatory" }}>
           <div className={styles.spacer}></div>
           {words.map((word, index) => (

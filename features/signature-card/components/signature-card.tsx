@@ -1,9 +1,9 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Download, ArrowRight, Mail, Phone, Globe } from "lucide-react"
+import { Download, ArrowRight, Mail, Phone, Globe, Instagram} from "lucide-react"
 import styles from "../styles/signature-card.module.css"
-import LogoCanvas from "./logo-canvas"
+import Image from "next/image"
 import { useEffect, useState } from 'react'
 
 export default function SignatureCard() {
@@ -21,7 +21,16 @@ export default function SignatureCard() {
     <div className={styles.card}>
       <div className={styles.cardInner}>
         <header className={styles.header}>
-          <LogoCanvas className={styles.logoCanvas} />
+        <div className={styles.profileImageContainer}>
+            <Image
+              src="/jnchprofile.png?height=100&width=100"
+              alt="Profile picture"
+              width={100}
+              height={100}
+              className={styles.profileImage}
+              priority
+            />
+          </div>
           <h2 className={styles.title}>Founder & CEO</h2>
         </header>
 
@@ -39,6 +48,10 @@ export default function SignatureCard() {
           <a href="https://jnch.media" target="_blank" rel="noopener noreferrer" className={styles.contactItem}>
             <Globe className={styles.icon} size={18} />
             <span>jnch.media</span>
+          </a>
+          <a href="https://instagram.com/jnch.oficial" className={styles.contactItem}>
+            <Instagram className={styles.icon} size={18} />
+            <span>Instagram</span>
           </a>
         </div>
 
