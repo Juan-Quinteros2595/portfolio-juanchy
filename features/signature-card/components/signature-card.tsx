@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Download, ArrowRight, Mail, Phone, Globe, Instagram} from "lucide-react"
+import { Download, ArrowRight, Mail, Phone, Globe, Instagram } from "lucide-react"
 import styles from "../styles/signature-card.module.css"
 import Image from "next/image"
 import { useEffect, useState } from 'react'
@@ -21,7 +21,7 @@ export default function SignatureCard() {
     <div className={styles.card}>
       <div className={styles.cardInner}>
         <header className={styles.header}>
-        <div className={styles.profileImageContainer}>
+          <div className={styles.profileImageContainer}>
             <Image
               src="/jnchprofile.png?height=100&width=100"
               alt="Profile picture"
@@ -43,7 +43,7 @@ export default function SignatureCard() {
           </a>
           <a href="tel:+34 658 22 26 98" className={styles.contactItem}>
             <Phone className={styles.icon} size={18} />
-            <span>+51 999 123 456</span>
+            <span>+34 658 22 26 98</span>
           </a>
           <a href="https://jnch.media" target="_blank" rel="noopener noreferrer" className={styles.contactItem}>
             <Globe className={styles.icon} size={18} />
