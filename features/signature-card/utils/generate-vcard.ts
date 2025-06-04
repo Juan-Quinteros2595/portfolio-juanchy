@@ -4,7 +4,7 @@ VERSION:3.0
 FN:Juanchi JNCH
 ORG:JNCH.MEDIA
 TITLE:Founder & CEO
-TEL;TYPE=cell:+51999123456
+TEL;TYPE=cell:+34 658 22 26 98
 EMAIL:jnch.oficial@gmail.com
 URL:https://jnch.media
 END:VCARD`

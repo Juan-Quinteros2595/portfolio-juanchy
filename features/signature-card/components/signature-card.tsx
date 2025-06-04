@@ -41,7 +41,7 @@ export default function SignatureCard() {
             <Mail className={styles.icon} size={18} />
             <span>jnch.oficial@gmail.com</span>
           </a>
-          <a href="tel:+51999123456" className={styles.contactItem}>
+          <a href="tel:+34 658 22 26 98" className={styles.contactItem}>
             <Phone className={styles.icon} size={18} />
             <span>+51 999 123 456</span>
           </a>
