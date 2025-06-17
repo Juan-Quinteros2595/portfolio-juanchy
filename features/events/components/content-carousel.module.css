@@ -1,0 +1,423 @@
+.carouselContainer {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 6rem 2rem 2rem 2rem;
+    background: #000;
+    color: white;
+    position: relative;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+/* Colores específicos para cada sección - SIN ROJO */
+.eventsContainer {
+    --accent-color: #d4af37;
+    /* Dorado */
+    --secondary-color: #2d2d2d;
+    /* Gris oscuro */
+}
+
+.ecommerceContainer {
+    --accent-color: #c0c0c0;
+    /* Plata */
+    --secondary-color: #704214;
+    /* Sepia */
+}
+
+.lifestyleContainer {
+    --accent-color: #b87333;
+    /* Cobre */
+    --secondary-color: #4b0082;
+    /* Índigo */
+}
+
+.carouselHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 10;
+}
+
+.sectionTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-color, #d4af37);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.carouselControls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.controlButton {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--accent-color, #d4af37);
+    color: var(--accent-color, #d4af37);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.controlButton:hover {
+    background: var(--accent-color, #d4af37);
+    color: #000;
+    transform: scale(1.1);
+}
+
+.itemCounter {
+    font-size: 0.9rem;
+    color: var(--accent-color, #d4af37);
+    min-width: 50px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.carouselContent {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+    min-height: 0;
+}
+
+.contentGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1000px;
+    align-items: center;
+    height: 100%;
+}
+
+.imageGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    aspect-ratio: 1;
+    max-height: 400px;
+}
+
+.imageContainer {
+    position: relative;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.imageContainer:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 30px rgba(var(--accent-color, #d4af37), 0.3);
+    border-color: var(--accent-color, #d4af37);
+}
+
+.gridImage {
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.imageContainer:hover .gridImage {
+    transform: scale(1.1);
+}
+
+.moreImagesOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--accent-color, #d4af37);
+}
+
+.contentInfo {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.contentTitle {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--accent-color, #d4af37);
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    line-height: 1.1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Título con controles en móvil */
+.contentTitleWithControls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.mobileCarouselControls {
+    display: none;
+}
+
+.contentMeta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.contentYear {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: white;
+}
+
+.contentClient {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 0.25rem 0.75rem;
+    background: var(--secondary-color, #2d2d2d);
+    border-radius: 1rem;
+}
+
+.contentDescription {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1.5rem;
+}
+
+.galleryButton {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: transparent;
+    border: 2px solid var(--accent-color, #d4af37);
+    color: var(--accent-color, #d4af37);
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 0.5rem;
+    align-self: flex-start;
+}
+
+.galleryButton:hover {
+    background: var(--accent-color, #d4af37);
+    color: #000;
+    transform: translateX(5px);
+}
+
+.imageCount {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+.buttonIcon {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.3s ease;
+}
+
+.galleryButton:hover .buttonIcon {
+    transform: translateX(5px);
+}
+
+/* Indicadores del carousel - SOLO para desktop */
+.indicators {
+    display: none;
+}
+
+@media (min-width: 769px) {
+    .indicators {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .activeIndicator {
+        background: var(--accent-color, #d4af37);
+        transform: scale(1.2);
+    }
+
+    .indicator:hover {
+        background: rgba(var(--accent-color, #d4af37), 0.6);
+    }
+}
+
+/* Responsive mejorado */
+@media (max-width: 768px) {
+    .carouselContainer {
+        padding: 5rem 1rem 2rem 1rem;
+        /* Reducido padding bottom */
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .carouselHeader {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .sectionTitle {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    /* Ocultar controles del header en móvil */
+    .carouselControls {
+        display: none;
+    }
+
+    /* Mostrar controles móviles al lado del título */
+    .mobileCarouselControls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .mobileControlButton {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--accent-color, #d4af37);
+        color: var(--accent-color, #d4af37);
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .mobileControlButton:hover {
+        background: var(--accent-color, #d4af37);
+        color: #000;
+    }
+
+    .contentGrid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        max-width: 100%;
+    }
+
+    .contentTitle {
+        font-size: 1.6rem;
+        text-align: center;
+        flex: 1;
+    }
+
+    .contentTitleWithControls {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .contentMeta {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .galleryButton {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+        align-self: center;
+        width: 100%;
+        justify-content: center;
+        max-width: 300px;
+    }
+
+    .imageGrid {
+        max-height: 300px;
+        order: -1;
+    }
+
+    .contentInfo {
+        padding: 1rem 0;
+        text-align: center;
+    }
+
+    .contentDescription {
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .carouselContainer {
+        padding: 4.5rem 0.75rem 2rem 0.75rem;
+    }
+
+    .imageGrid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        max-height: 250px;
+    }
+
+    .sectionTitle {
+        font-size: 1.2rem;
+    }
+
+    .contentTitle {
+        font-size: 1.3rem;
+    }
+
+    .contentDescription {
+        font-size: 0.9rem;
+    }
+
+    .mobileControlButton {
+        width: 24px;
+        height: 24px;
+    }
+}
