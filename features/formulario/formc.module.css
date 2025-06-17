@@ -128,7 +128,11 @@
 }
 
 .formGroup {
-  margin-bottom: 1rem;
+  position: relative;
+  margin-bottom: 2rem;
+    /* Aumentado para dar espacio a los errores */
+    min-height: 60px;
+    /* Altura mínima para evitar saltos */
 }
 
 .input {
@@ -222,13 +226,14 @@
 
 .errorMessage {
   color: #ff3333;
-  font-size: 0.8rem;
-  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+  padding-left: 0.25rem;
   animation: fadeIn 0.3s ease-in-out;
-  position: absolute;
-  left: 0;
-  bottom: -1.2rem;
+  position: static;
+  display: block;
   width: 100%;
+  line-height: 1.2;
 }
 
 @keyframes fadeIn {

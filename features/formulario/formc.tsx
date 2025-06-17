@@ -8,11 +8,10 @@ import { motion } from "framer-motion"
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3"
 import styles from "./formc.module.css"
 
-// Importar el componente DisintegrateText
+// Importar componentes
 import { DisintegrateText } from "./DisintegrateText"
 import type { FormData, SubmitStatus, ValidationErrors } from "@/types/form"
-import { fetchWithTimeout, FetchError } from '@/utils/fetch';
-
+import { fetchWithTimeout } from "@/utils/fetch"
 
 interface Wave {
   amplitude: number
@@ -34,15 +33,17 @@ export default function FormC() {
     idea: "",
   })
 
-  // Nuevos estados para manejar el envío del formulario
+  // Estados para manejar el envío del formulario
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>({
     success: undefined,
     message: undefined,
   })
+
   // Estado para manejar la disponibilidad de reCAPTCHA
   const [recaptchaAvailable, setRecaptchaAvailable] = useState(false)
-    // Estado para manejar errores de validación
+
+  // Estado para manejar errores de validación
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({
     name: "",
     email: "",
@@ -59,25 +60,18 @@ export default function FormC() {
   // Hook de reCAPTCHA
   const { executeRecaptcha } = useGoogleReCaptcha()
 
+  // Verificar disponibilidad de reCAPTCHA
   useEffect(() => {
     const recaptchaKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
     if (executeRecaptcha && recaptchaKey) {
+      console.log("✅ reCAPTCHA configurado correctamente")
       setRecaptchaAvailable(true)
     }
   }, [executeRecaptcha])
 
-    // Validar campos en tiempo real
-  useEffect(() => {
-    validateField("name", formData.name)
-    validateField("email", formData.email)
-    validateField("idea", formData.idea)
-  }, [formData])
-
   // Función para validar un campo específico
   const validateField = (field: keyof ValidationErrors, value: string) => {
     let error = ""
-
-    if (!touchedFields[field]) return
 
     switch (field) {
       case "name":
@@ -111,7 +105,21 @@ export default function FormC() {
     return error === ""
   }
 
-  // Marcar un campo como tocado
+  // Validación en tiempo real
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+
+    // Validar solo si el campo ya fue tocado
+    if (touchedFields[name as keyof ValidationErrors]) {
+      validateField(name as keyof ValidationErrors, value)
+    }
+  }
+
+  // Marcar un campo como tocado y validar
   const handleBlur = (field: keyof ValidationErrors) => {
     setTouchedFields((prev) => ({
       ...prev,
@@ -122,7 +130,14 @@ export default function FormC() {
 
   // Verificar si el formulario es válido
   const isFormValid = () => {
-    return !validationErrors.name && !validationErrors.email && !validationErrors.idea
+    return (
+      !validationErrors.name &&
+      !validationErrors.email &&
+      !validationErrors.idea &&
+      formData.name.trim() &&
+      formData.email.trim() &&
+      formData.idea.trim()
+    )
   }
 
   useEffect(() => {
@@ -140,7 +155,7 @@ export default function FormC() {
     setCanvasSize()
 
     // Usar fuentes del sistema
-    ctx.font = 'bold 80px "Gobold Hollow"';
+    ctx.font = 'bold 80px "Gobold Hollow"'
     ctx.strokeStyle = "#ffffff"
     ctx.lineWidth = 2
     ctx.strokeText("JNCH", 40, 100)
@@ -161,7 +176,7 @@ export default function FormC() {
     contactCanvas.height = 80
 
     // Usar fuentes del sistema
-    contactCtx.font = 'bold 40px "Gobold Hollow"';
+    contactCtx.font = 'bold 40px "Gobold Hollow"'
     contactCtx.strokeStyle = "#666666"
     contactCtx.lineWidth = 1
     contactCtx.strokeText("CONTACT US", 25, 50)
@@ -251,10 +266,12 @@ export default function FormC() {
     }
   }, [])
 
-    // Nueva función handleSubmit que envía los datos a la API de Resend
+  // Función para enviar el formulario
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-        // Marcar todos los campos como tocados para mostrar errores
+    e.preventDefault()
+    console.log("Formulario enviado, estableciendo isSubmitting a true")
+
+    // Marcar todos los campos como tocados para mostrar errores
     setTouchedFields({
       name: true,
       email: true,
@@ -274,28 +291,31 @@ export default function FormC() {
       })
       return
     }
-    setIsSubmitting(true);
-    setSubmitStatus({})
-    
-    try {
-      // Añadir un retraso artificial para probar el loader (quitar en producción)
-      await new Promise((resolve) => setTimeout(resolve, 2000))
 
-      let recaptchaToken = null;
-      
+    // Iniciar envío
+    setIsSubmitting(true)
+    setSubmitStatus({})
+
+    try {
+      // Añadir un retraso artificial para probar la animación (quitar en producción)
+      await new Promise((resolve) => setTimeout(resolve, 3000))
+
+      let recaptchaToken = null
+
       if (recaptchaAvailable && executeRecaptcha) {
         try {
-          recaptchaToken = await executeRecaptcha("contact_form");
+          recaptchaToken = await executeRecaptcha("contact_form")
           if (!recaptchaToken) {
-            throw new Error("Error en la verificación de reCAPTCHA");
+            throw new Error("Error en la verificación de reCAPTCHA")
           }
         } catch (error) {
-          throw new Error("Error en la verificación de seguridad. Por favor, inténtalo de nuevo.");
+          console.error("Error al ejecutar reCAPTCHA:", error)
+          throw new Error("Error en la verificación de seguridad. Por favor, inténtalo de nuevo.")
         }
       }
 
       // Enviar datos del formulario junto con el token de reCAPTCHA
-      const response = await fetchWithTimeout("/api/send", {  
+      const response = await fetchWithTimeout("/api/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -305,18 +325,18 @@ export default function FormC() {
           recaptchaToken,
           bypassRecaptcha: !recaptchaToken,
         }),
-      });
+      })
 
-      let data;
+      let data
       try {
-        const contentType = response.headers.get("Content-Type");
+        const contentType = response.headers.get("Content-Type")
         if (contentType && contentType.includes("application/json")) {
-          data = await response.json();
+          data = await response.json()
         } else {
-          throw new Error("Unexpected response format");
+          throw new Error("Unexpected response format")
         }
       } catch (error) {
-        throw new Error("Failed to parse server response");
+        throw new Error("Failed to parse server response")
       }
 
       if (!response.ok) {
@@ -329,36 +349,33 @@ export default function FormC() {
         message: "¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.",
       })
       setFormData({ name: "", email: "", phone: "", idea: "" })
-      // Resetear campos tocados
+      // Resetear campos tocados y errores
       setTouchedFields({
         name: false,
         email: false,
         idea: false,
       })
+      setValidationErrors({
+        name: "",
+        email: "",
+        idea: "",
+      })
     } catch (error: any) {
+      console.error("Error sending message:", error)
       setSubmitStatus({
         success: false,
         message: error.message || "Error al enviar el mensaje. Por favor, inténtalo de nuevo.",
       })
     } finally {
+      console.log("Finalizando envío, estableciendo isSubmitting a false")
       setIsSubmitting(false)
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
-  }
-  // Añadir logs para depuración
-  useEffect(() => {
-  }, [isSubmitting])
-
   return (
     <section className={styles.section} id="contact">
       <canvas ref={waveCanvasRef} className={styles.waveCanvas} />
+
       {/* Mostrar advertencia si reCAPTCHA no está disponible */}
       {!recaptchaAvailable && (
         <div className="fixed top-0 left-0 right-0 bg-yellow-100 text-yellow-800 p-2 text-center text-sm z-50">
@@ -366,7 +383,6 @@ export default function FormC() {
           contra spam.
         </div>
       )}
-      {/* Mostrar pantalla de carga durante el envío */}
 
       <div className={styles.container}>
         <motion.div
@@ -382,7 +398,7 @@ export default function FormC() {
           <div className={styles.formHeader}>
             <canvas ref={contactCanvasRef} className="w-[300px] h-[80px] font-samsungsans" />
           </div>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -480,7 +496,7 @@ export default function FormC() {
               )}
             </motion.div>
 
-            {/* Nuevo: Mostrar mensaje de éxito o error */}
+            {/* Mostrar mensaje de éxito o error */}
             {submitStatus.message && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -504,20 +520,19 @@ export default function FormC() {
               disabled={isSubmitting}
             >
               <div className={styles["button-background"]} />
-              {/* Renderizado condicional: muestra la barra de progreso o el texto del botón */}
+
               {isSubmitting ? (
-              // Cuando isSubmitting es true, muestra la barra de progreso
-              <div className={styles.progressBarContainer}>
+                <div className={styles.progressBarContainer}>
                   <div className={styles.progressBar}></div>
-              </div>
+                </div>
               ) : (
-              // Cuando isSubmitting es false, muestra el texto y el icono
-              <>
-              <span>SEND MESSAGE</span>
-              <Send size={18} />
-              </>
+                <>
+                  <span>SEND MESSAGE</span>
+                  <Send size={18} />
+                </>
               )}
             </motion.button>
+
             {/* Nota de protección reCAPTCHA */}
             <div className="text-xs text-center text-gray-500 mt-4">
               Este sitio está protegido por reCAPTCHA y aplican la{" "}
